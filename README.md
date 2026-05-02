@@ -7,5 +7,8 @@
 
 模组中涉及动画等的部分代码使用ai生成。 Parts of the code related to animation for this mod were generated or optimized with the help of AI (e.g., Gemini).
 
+2026.5.2-v1.0测试版发布
+
 ## 目前计划
 目前计划调整部分卡牌，增加更多的卡牌,遗物，药水和新事件。并在后续添加动画。
+
