@@ -1,0 +1,17 @@
+﻿{
+  "YUUKI-YUKI_CHARACTER.aromaPrinciple": "[sine][blue]嗯……被找到了哟。[/blue][/sine]",
+  "YUUKI-YUKI_CHARACTER.banter.alive.endTurnPing": "雪雪快要化掉了呢",
+  "YUUKI-YUKI_CHARACTER.banter.dead.endTurnPing": "雪雪……化掉了的说……",
+  "YUUKI-YUKI_CHARACTER.description": "来自月之咲的不可思议的女孩子\n在春天到来之前，不论何处，我们都可以去哦",
+  "YUUKI-YUKI_CHARACTER.eventDeathPrevention": "雪雪……还没到融化的时候喔！",
+  "YUUKI-YUKI_CHARACTER.goldMonologue": "[sine]哇，亮晶晶的……这些可以买好多好多雪兔兔吧？[/sine]",
+  "YUUKI-YUKI_CHARACTER.cardsModifierTitle": "雪雪卡牌",
+  "YUUKI-YUKI_CHARACTER.cardsModifierDescription": "雪雪的卡牌现在会出现在奖励和商店中。",
+  "YUUKI-YUKI_CHARACTER.possessiveAdjective": "她的",
+  "YUUKI-YUKI_CHARACTER.pronounObject": "她",
+  "YUUKI-YUKI_CHARACTER.pronounPossessive": "她的",
+  "YUUKI-YUKI_CHARACTER.pronounSubject": "她",
+  "YUUKI-YUKI_CHARACTER.title": "雪雪",
+  "YUUKI-YUKI_CHARACTER.titleObject": "雪雪",
+  "YUUKI-YUKI_CHARACTER.unlockText": "解锁雪雪进行游戏。"
+}

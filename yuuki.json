@@ -1,0 +1,13 @@
+{
+    "id": "yuuki",
+    "name": "雪雪mod",
+    "author": "Yukiha_Xichen",
+    "description": "基于星辰恋曲的白色永恒制作的mod",
+    "version": "1.0",
+    "has_pck": true,
+    "has_dll": true,
+    "dependencies": [
+        "BaseLib"
+    ],
+    "affects_gameplay": true
+}

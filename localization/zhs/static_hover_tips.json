@@ -1,0 +1,8 @@
+{
+    "YUUKI_CAPACITY_OVERLOAD.title": "能力过载",
+    "YUUKI_CAPACITY_OVERLOAD.description": "在你的弃牌堆放入等同于能力过载数值的 [blue]虚空[/blue] 。",
+    "YUUKI_SNOW_CRYSTAL.title": "雪晶",
+    "YUUKI_SNOW_CRYSTAL.description": "凝聚着雪之妖精力量的结晶。上限为9。雪晶层数大于3时，超出的每层雪晶为雪雪提供10％伤害加成。层数小于3时则造成的伤害降低10％，且回合开始时额外抽一张牌并获得1层雪晶。当层数超过8时，会在回合开始时流逝至8。",
+    "YUUKI_EMPATHY.title": "共感",
+    "YUUKI_EMPATHY.description": "状态。场上每有一个拥有 [blue]共感[/blue] 的敌人，受到的伤害增加 [gold]25%[/gold] 。当拥有 [blue]共感[/blue] 的敌人获得格挡时，雪雪于下回合获得 [blue]25%[/blue] 的格挡值。"
+}

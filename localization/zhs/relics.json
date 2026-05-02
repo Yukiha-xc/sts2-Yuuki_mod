@@ -1,0 +1,17 @@
+{
+    "YUUKI-PURE_WHITE_GIFT.title": "纯白赠礼",
+    "YUUKI-PURE_WHITE_GIFT.description": "战斗开始时，获得 3 [blue]雪晶[/blue] [img=24x24]res://yuuki/images/ui/snow_crystal.png[/img]。",
+    "YUUKI-PURE_WHITE_GIFT.flavor": "属于雪之妖精，来自母亲的礼物",
+    "YUUKI-ETERNAL_GIFT.title": "永恒赠礼",
+    "YUUKI-ETERNAL_GIFT.description": "战斗开始时，获得 6 [blue]雪晶[/blue] [img=24x24]res://yuuki/images/ui/snow_crystal.png[/img]。",
+    "YUUKI-ETERNAL_GIFT.flavor": "属于雪之妖精，永远不会融化的珍宝",
+    "YUUKI-SECRET_TREASURE.title": "星天宫的秘宝",
+    "YUUKI-SECRET_TREASURE.description": "战斗开始时，随机使一名敌人获得 [blue]共感[/blue] 。",
+    "YUUKI-SECRET_TREASURE.flavor": "星天宫收集的白色宝石，蕴含着生命。",
+    "YUUKI-SISTERS_COOKING.title": "姐姐的料理",
+    "YUUKI-SISTERS_COOKING.description": "战斗中，每当你打出一张能力牌，获得 [gold]1[/gold] [blue]雪晶[/blue] [img=24x24]res://yuuki/images/ui/snow_crystal.png[/img]。",
+    "YUUKI-SISTERS_COOKING.flavor": "幸姐姐经过无数次尝试终于做出了合格的料理...吗？",
+    "YUUKI-CAPACITY_RING.title": "能力戒指",
+    "YUUKI-CAPACITY_RING.description": "在你的第 [gold]1[/gold] 个回合开始时，额外获得 [blue]{Energy}[/blue] 能量，然后 [blue]能力过载[/blue] 1。",
+    "YUUKI-CAPACITY_RING.flavor": "如果有这个，应该就能缓解能力者的痛苦吧。"
+}
