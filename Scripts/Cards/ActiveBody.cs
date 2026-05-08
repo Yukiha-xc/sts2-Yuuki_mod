@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -32,8 +32,7 @@ public class ActiveBody : YukiCardModel
         if (hasStrength)
         {
             
-            await PowerCmd.Apply<ActiveBodyPower>(
-                base.Owner.Creature, 
+            await PowerCmd.Apply<ActiveBodyPower>(choiceContext, base.Owner.Creature, 
                 base.DynamicVars["TempStrength"].BaseValue, 
                 base.Owner.Creature, 
                 this
@@ -42,8 +41,7 @@ public class ActiveBody : YukiCardModel
 
         
         
-        await PowerCmd.Apply<StrengthPower>(
-            base.Owner.Creature, 
+        await PowerCmd.Apply<StrengthPower>(choiceContext, base.Owner.Creature, 
             base.DynamicVars["Strength"].BaseValue, 
             base.Owner.Creature, 
             this
@@ -58,3 +56,4 @@ public class ActiveBody : YukiCardModel
         base.DynamicVars["TempStrength"].UpgradeValueBy(1m);
     }
 }
+

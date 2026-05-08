@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using MegaCrit.Sts2.Core.Commands;
 
 namespace yuuki.Scripts.Cards;
 
@@ -17,10 +18,12 @@ public class WhiteOathDamageVar : DamageVar
 
     public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target, bool runGlobalHooks)
     {
-        int crystals = YukiCrystalSystem.CurrentCrystals;
-        decimal multiplier = card.IsUpgraded ? 5m : 4m;
-        decimal finalBaseValue = crystals * multiplier;
-        this.BaseValue = finalBaseValue;
+        // 仅在战斗中计算雪晶伤害加成
+        int crystals = (card.CombatState != null) ? YukiCrystalSystem.CurrentCrystals : 0;
+        decimal multiplier = card.DynamicVars["Multiplier"].BaseValue;
+        
+        this.BaseValue = crystals * multiplier;
+        
         base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);
     }
 }
@@ -46,9 +49,14 @@ public class WhiteOath : YukiCardModel
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        
         YukiCrystalSystem.AddCrystals(2);
 
-        await MegaCrit.Sts2.Core.Commands.DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
+        
+        base.DynamicVars.Damage.UpdateCardPreview(this, CardPreviewMode.Normal, cardPlay.Target, true);
+
+        
+        await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .Targeting(cardPlay.Target)
             .Execute(choiceContext);
@@ -59,5 +67,3 @@ public class WhiteOath : YukiCardModel
         DynamicVars["Multiplier"].UpgradeValueBy(1m);
     }
 }
-
-

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -35,30 +35,27 @@ public class AccumulatedSnow : YukiCardModel
 
         if (hasEmpathy)
         {
-            
             await PowerCmd.Remove<yuuki.Scripts.Powers.EmpathyPower>(target);
             
-            
             damageToDeal += base.DynamicVars["ExtraDamage"].BaseValue;
-            
-            
             YukiCrystalSystem.AddCrystals(1);
         }
 
         
-        await DamageCmd.Attack(damageToDeal)
-            .FromCard(this)
-            .Targeting(target)
-            .Execute(choiceContext);
+        if (target.IsAlive)
+        {
+            await DamageCmd.Attack(damageToDeal)
+                .FromCard(this)
+                .Targeting(target)
+                .Execute(choiceContext);
+        }
             
         await Cmd.Wait(0.25f);
     }
 
     protected override void OnUpgrade()
     {
-        
-        base.DynamicVars["ExtraDamage"].UpgradeValueBy(3m);
+        base.DynamicVars.Damage.UpgradeValueBy(2m);
+        base.DynamicVars["ExtraDamage"].UpgradeValueBy(4m);
     }
 }
-
-

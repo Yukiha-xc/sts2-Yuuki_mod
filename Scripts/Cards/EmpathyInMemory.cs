@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -31,7 +31,7 @@ public override string PortraitPath => "res://yuuki/images/cards/YUKI_e01a2.png"
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        await PowerCmd.Apply<EmpathyInMemoryPower>(base.Owner.Creature, 1m, base.Owner.Creature, this);
+        await PowerCmd.Apply<EmpathyInMemoryPower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
@@ -40,4 +40,5 @@ public override string PortraitPath => "res://yuuki/images/cards/YUKI_e01a2.png"
         base.DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
+
 

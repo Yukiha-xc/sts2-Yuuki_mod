@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,7 +40,7 @@ public class Reunion : YukiCardModel
                 await PowerCmd.Remove<EmpathyPower>(enemy);
             }
             
-            int extraEnergy = base.IsUpgraded ? 2 : 1;
+            int extraEnergy = (int)base.DynamicVars["Energy"].BaseValue;
             await PlayerCmd.GainEnergy(extraEnergy, base.Owner);
         }
 
@@ -49,6 +49,7 @@ public class Reunion : YukiCardModel
 
     protected override void OnUpgrade()
     {
+        base.DynamicVars["Energy"].UpgradeValueBy(1m);
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -22,8 +22,7 @@ public class OverloadResponse : YukiCardModel
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        await PowerCmd.Apply<OverloadResponsePower>(
-            base.Owner.Creature, 
+        await PowerCmd.Apply<OverloadResponsePower>(choiceContext, base.Owner.Creature, 
             1m, 
             base.Owner.Creature, 
             this
@@ -38,3 +37,4 @@ public class OverloadResponse : YukiCardModel
         base.EnergyCost.UpgradeBy(-1);
     }
 }
+

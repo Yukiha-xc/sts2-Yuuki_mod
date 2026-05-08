@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -21,7 +21,7 @@ public class NoMoreGoodbyes : YukiCardModel
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        await PowerCmd.Apply<NoMoreGoodbyesPower>(base.Owner.Creature, 1m, base.Owner.Creature, this);
+        await PowerCmd.Apply<NoMoreGoodbyesPower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, this);
         
         await Cmd.Wait(0.25f);
     }
@@ -32,3 +32,4 @@ public class NoMoreGoodbyes : YukiCardModel
         base.EnergyCost.UpgradeBy(-1);
     }
 }
+

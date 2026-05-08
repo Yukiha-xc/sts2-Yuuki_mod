@@ -25,7 +25,7 @@ public class Fimbulwinter : YukiCardModel
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<FimbulwinterPower>(base.Owner.Creature, base.DynamicVars["Threshold"].BaseValue, base.Owner.Creature, this);
+        await PowerCmd.Apply<FimbulwinterPower>(choiceContext, base.Owner.Creature, base.DynamicVars["Threshold"].BaseValue, base.Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
@@ -33,3 +33,4 @@ public class Fimbulwinter : YukiCardModel
         base.DynamicVars["Threshold"].UpgradeValueBy(1m);
     }
 }
+

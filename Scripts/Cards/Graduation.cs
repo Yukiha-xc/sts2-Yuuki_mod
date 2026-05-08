@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -32,7 +32,7 @@ public class Graduation : YukiCardModel
         int crystalCount = YukiCrystalSystem.CurrentCrystals;
         if (crystalCount <= 0) return;
 
-        CombatState? combatState = Owner.Creature.CombatState;
+        ICombatState? combatState = Owner.Creature.CombatState;
         if (combatState == null) return;
 
         System.Random random = new System.Random();

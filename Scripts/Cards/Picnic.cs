@@ -49,11 +49,11 @@ public class Picnic : YukiCardModel
             
             foreach (var enemy in aliveEnemies)
             {
-                await PowerCmd.Apply<EmpathyPower>(enemy, 1m, base.Owner.Creature, this);
+                await PowerCmd.Apply<EmpathyPower>(choiceContext, enemy, 1m, base.Owner.Creature, this);
             }
-            
-            
-            
+
+            CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
+            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
         }
 
         await Cmd.Wait(0.25f);
@@ -64,4 +64,6 @@ public class Picnic : YukiCardModel
         base.DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
+
+
 

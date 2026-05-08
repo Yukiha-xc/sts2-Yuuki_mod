@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -24,7 +24,7 @@ public class PsychicGuardian : YukiCardModel
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        await PowerCmd.Apply<PsychicGuardianPower>(base.Owner.Creature, base.DynamicVars["Draw"].BaseValue, base.Owner.Creature, this);
+        await PowerCmd.Apply<PsychicGuardianPower>(choiceContext, base.Owner.Creature, base.DynamicVars["Draw"].BaseValue, base.Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
@@ -33,3 +33,4 @@ public class PsychicGuardian : YukiCardModel
         base.DynamicVars["Draw"].UpgradeValueBy(1m);
     }
 }
+

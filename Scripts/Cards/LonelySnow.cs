@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -28,8 +28,7 @@ public class LonelySnow : YukiCardModel
     {
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
         
-        await PowerCmd.Apply<LonelySnowPower>(
-            base.Owner.Creature, 
+        await PowerCmd.Apply<LonelySnowPower>(choiceContext, base.Owner.Creature, 
             base.DynamicVars["BlockPerCrystal"].BaseValue, 
             base.Owner.Creature, 
             this
@@ -41,3 +40,4 @@ public class LonelySnow : YukiCardModel
         base.DynamicVars["BlockPerCrystal"].UpgradeValueBy(1m);
     }
 }
+

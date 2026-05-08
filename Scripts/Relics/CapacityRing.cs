@@ -69,7 +69,8 @@ public class CapacityRing : CustomRelicModel
             
             
             CardModel voidCard = combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
         }
     }
 }
+

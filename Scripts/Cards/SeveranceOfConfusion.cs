@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -37,7 +37,7 @@ public class SeveranceOfConfusion : YukiCardModel
                 {
                     await CreatureCmd.LoseBlock(enemy, enemy.Block);
                 }
-                await PowerCmd.Apply<VulnerablePower>(enemy, base.DynamicVars["Power"].BaseValue, base.Owner.Creature, this);
+                await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy, base.DynamicVars["Power"].BaseValue, base.Owner.Creature, this);
             }
         }
 
@@ -47,7 +47,7 @@ public class SeveranceOfConfusion : YukiCardModel
             .Execute(choiceContext);
 
         CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-        await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+        await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
 
         await Cmd.Wait(0.25f);
     }
@@ -57,4 +57,6 @@ public class SeveranceOfConfusion : YukiCardModel
         base.DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
+
+
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -20,7 +20,7 @@ public class WhiteEternity : YukiCardModel
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        await PowerCmd.Apply<WhiteEternityPower>(
+        await PowerCmd.Apply<WhiteEternityPower>(choiceContext,
             base.Owner.Creature, 
             1m, 
             base.Owner.Creature, 
@@ -36,3 +36,5 @@ public class WhiteEternity : YukiCardModel
         base.EnergyCost.UpgradeBy(-1);
     }
 }
+
+

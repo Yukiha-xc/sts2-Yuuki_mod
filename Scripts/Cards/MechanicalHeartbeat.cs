@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -29,14 +29,14 @@ public class MechanicalHeartbeat : YukiCardModel
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
  
-        await PowerCmd.Apply<ArtifactPower>(base.Owner.Creature, 1m, base.Owner.Creature, this);
+        await PowerCmd.Apply<ArtifactPower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, this);
 
         
         int overloadCount = CapacityOverload;
         for (int i = 0; i < overloadCount; i++)
         {
             CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
         }
 
         await Cmd.Wait(0.25f);
@@ -47,3 +47,5 @@ public class MechanicalHeartbeat : YukiCardModel
         base.DynamicVars["CapacityOverload"].UpgradeValueBy(-1m);
     }
 }
+
+

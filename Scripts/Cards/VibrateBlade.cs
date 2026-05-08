@@ -1,4 +1,4 @@
-﻿using MegaCrit.Sts2.Core.Commands.Builders;
+using MegaCrit.Sts2.Core.Commands.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ public class VibrateBlade : YukiCardModel
             .Execute(choiceContext);
 
         
-        decimal blockToGain = attack.Results.Sum(r => r.UnblockedDamage);
+        decimal blockToGain = attack.Results.SelectMany(r => r).Sum(r => r.UnblockedDamage);
 
         if (blockToGain > 0)
         {

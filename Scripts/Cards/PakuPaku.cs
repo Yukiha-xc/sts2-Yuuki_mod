@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -30,6 +30,9 @@ public class PakuPaku : YukiCardModel
         if (YukiCrystalSystem.CurrentCrystals >= consumeAmount)
         {
             YukiCrystalSystem.AddCrystals(-consumeAmount);
+            
+            await PlayerCmd.GainEnergy(1, base.Owner);
+            
             await CardPileCmd.Draw(choiceContext, base.DynamicVars["Cards"].BaseValue, base.Owner);
         }
     }

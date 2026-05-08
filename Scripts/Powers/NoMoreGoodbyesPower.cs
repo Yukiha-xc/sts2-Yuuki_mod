@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Combat;
@@ -35,7 +35,7 @@ public sealed class NoMoreGoodbyesPower : CustomPowerModel
                 
                 
                 
-                await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, true);
+                await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, null);
             }
             
             
@@ -55,3 +55,4 @@ public sealed class NoMoreGoodbyesPower : CustomPowerModel
     public override string CustomPackedIconPath => "res://yuuki/images/powers/NoMoreGoodbyesPower.png";
     public override string CustomBigIconPath => "res://yuuki/images/powers/NoMoreGoodbyesPower.png";
 }
+

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -40,7 +40,7 @@ public class EmotionalPeering : YukiCardModel
         if (cardPlay.Target != null)
         {
             
-            await PowerCmd.Apply<EmpathyPower>(cardPlay.Target, 1m, base.Owner.Creature, this);
+            await PowerCmd.Apply<EmpathyPower>(choiceContext, cardPlay.Target, 1m, base.Owner.Creature, this);
         }
 
         await Cmd.Wait(0.25f);
@@ -52,4 +52,5 @@ public class EmotionalPeering : YukiCardModel
         base.EnergyCost.UpgradeBy(-1);
     }
 }
+
 

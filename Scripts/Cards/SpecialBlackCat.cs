@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -32,7 +32,7 @@ public class SpecialBlackCat : YukiCardModel
         decimal reduction = base.DynamicVars["Reduction"].BaseValue;
         
         
-        var power = await PowerCmd.Apply<BlackCatPower>(base.Owner.Creature, 2m, base.Owner.Creature, this);
+        var power = await PowerCmd.Apply<BlackCatPower>(choiceContext, base.Owner.Creature, 2m, base.Owner.Creature, this);
         if (power != null)
         {
             power.ReductionAmount = reduction;
@@ -44,4 +44,5 @@ public class SpecialBlackCat : YukiCardModel
         base.DynamicVars["Reduction"].UpgradeValueBy(3m);
     }
 }
+
 

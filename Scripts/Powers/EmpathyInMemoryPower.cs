@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
@@ -12,6 +12,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using BaseLib.Abstracts;
 
 namespace yuuki.Scripts.Powers;
+
 public sealed class EmpathyInMemoryPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
@@ -49,24 +50,8 @@ public sealed class EmpathyInMemoryPower : CustomPowerModel
         }
     }
 
-    public override async Task AfterPowerAmountChanged(PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
-    {
-        
-        
-        if (power is EmpathyPower && amount != 0m)
-        {
-            var target = power.Owner;
-            if (target != null && target.IsAlive)
-            {
-                Flash();
-                decimal damageValue = base.DynamicVars.Damage.BaseValue;
-                
-                var choiceContext = new ThrowingPlayerChoiceContext();
-                await CreatureCmd.Damage(choiceContext, target, damageValue, ValueProp.Move, base.Owner, null);
-            }
-        }
-    }
-
+    
+    
     public override string CustomPackedIconPath => "res://yuuki/images/powers/EmpathyInMemoryPower.png";
     public override string CustomBigIconPath => "res://yuuki/images/powers/EmpathyInMemoryPower.png";
 }

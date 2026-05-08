@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -25,18 +25,19 @@ public class Diary : YukiCardModel
     {
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Attack", base.Owner.Character.AttackAnimDelay);
 
+        
         await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .TargetingAllOpponents(base.CombatState)
             .WithHitFx("vfx/vfx_attack_blunt", null, "heavy_attack.mp3")
             .Execute(choiceContext);
 
-        await PowerCmd.Apply<DiaryPower>(
-            base.Owner.Creature, 
-            base.DynamicVars.Damage.BaseValue, 
-            base.Owner.Creature, 
-            this
-        );
+        
+        var power = await PowerCmd.Apply<DiaryPower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, this);
+        if (power is DiaryPower diaryPower)
+        {
+            diaryPower.SetDamage(base.DynamicVars.Damage.BaseValue);
+        }
 
         await Cmd.Wait(0.25f);
     }

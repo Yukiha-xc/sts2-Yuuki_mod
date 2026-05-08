@@ -1,11 +1,9 @@
-using MegaCrit.Sts2.Core.Models.Powers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using yuuki.Scripts.Powers;
@@ -20,27 +18,28 @@ public class SnowCrystalAbsorption : YukiCardModel
     public override bool UsesSnowCrystals => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Strength", 2m),
-        new DynamicVar("YukiConsume", 2m)
+        new DynamicVar("YukiConsume", 2m),
+        new DynamicVar("EnergyGain", 2m)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (YukiCrystalSystem.CurrentCrystals >= 2)
+        int consumeAmount = (int)base.DynamicVars["YukiConsume"].BaseValue;
+        
+        if (YukiCrystalSystem.CurrentCrystals >= consumeAmount)
         {
-            YukiCrystalSystem.AddCrystals(-2);
-            await PlayerCmd.GainEnergy(2, base.Owner);
             
-            decimal strengthAmount = DynamicVars["Strength"].BaseValue;
+            YukiCrystalSystem.AddCrystals(-consumeAmount);
             
-            await PowerCmd.Apply<StrengthPower>(base.Owner.Creature, strengthAmount, base.Owner.Creature, this);
             
-            await PowerCmd.Apply<SnowAbsorptionPower>(base.Owner.Creature, strengthAmount, base.Owner.Creature, this);
+            int energyAmount = (int)base.DynamicVars["EnergyGain"].BaseValue;
+            await PlayerCmd.GainEnergy(energyAmount, base.Owner);
         }
     }
 
     protected override void OnUpgrade()
     {
-        base.DynamicVars["Strength"].UpgradeValueBy(2m);
+        
+        base.DynamicVars["EnergyGain"].UpgradeValueBy(1m);
     }
 }

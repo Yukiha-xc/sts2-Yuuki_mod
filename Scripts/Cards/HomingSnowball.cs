@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -19,30 +19,37 @@ public class HomingSnowball : YukiCardModel
     public override bool UsesSnowCrystals => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(8m, ValueProp.Move)
+        new DamageVar(8m, ValueProp.Move),
+        new DynamicVar("Vulnerable", 1m)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (YukiCrystalSystem.CurrentCrystals > 5 && cardPlay.Target != null)
+        var target = cardPlay.Target;
+        if (target == null) return;
+
+        
+        if (YukiCrystalSystem.CurrentCrystals > 4)
         {
-            await PowerCmd.Apply<VulnerablePower>(
-                cardPlay.Target, 
-                1m, 
+            await PowerCmd.Apply<VulnerablePower>(choiceContext, target, 
+                base.DynamicVars["Vulnerable"].BaseValue, 
                 Owner.Creature, 
                 this, 
                 false
             );
         }
 
-        await MegaCrit.Sts2.Core.Commands.DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+        
+        await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
             .FromCard(this)
-            .Targeting(cardPlay.Target)
+            .Targeting(target)
             .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);
+        
+        base.DynamicVars["Vulnerable"].UpgradeValueBy(1m);
     }
 }
+

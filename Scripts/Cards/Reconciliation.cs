@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -42,9 +42,11 @@ public class Reconciliation : YukiCardModel
                 
                 await PowerCmd.Remove<EmpathyPower>(enemy);
                 
-                
-                await PowerCmd.Apply<WeakPower>(enemy, (decimal)debuffAmount, base.Owner.Creature, this);
-                await PowerCmd.Apply<VulnerablePower>(enemy, (decimal)debuffAmount, base.Owner.Creature, this);
+                if (enemy.IsAlive)
+                {
+                    await PowerCmd.Apply<WeakPower>(choiceContext, enemy, (decimal)debuffAmount, base.Owner.Creature, this);
+                    await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy, (decimal)debuffAmount, base.Owner.Creature, this);
+                }
             }
         }
 
@@ -59,3 +61,4 @@ public class Reconciliation : YukiCardModel
         base.DynamicVars["Power"].UpgradeValueBy(2m);
     }
 }
+

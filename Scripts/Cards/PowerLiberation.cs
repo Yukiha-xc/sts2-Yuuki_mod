@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -47,7 +47,7 @@ public class PowerLiberation : YukiCardModel
         for (int i = 0; i < overloadCount; i++)
         {
             CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
         }
 
         await Cmd.Wait(0.25f);
@@ -59,3 +59,4 @@ public class PowerLiberation : YukiCardModel
         base.DynamicVars.Block.UpgradeValueBy(2m);
     }
 }
+

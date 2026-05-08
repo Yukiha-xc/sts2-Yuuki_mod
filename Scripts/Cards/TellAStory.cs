@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -42,7 +42,7 @@ public class TellAStory : YukiCardModel
         
         if (selected != null)
         {
-            await CardPileCmd.AddGeneratedCardToCombat(selected, PileType.Hand, true);
+            await CardPileCmd.AddGeneratedCardToCombat(selected, PileType.Hand, null);
         }
     }
 

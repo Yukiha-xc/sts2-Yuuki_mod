@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -46,7 +46,7 @@ public class FoundYou : YukiCardModel
             
             if (selectedCards.All(c => c.Type == CardType.Skill) && cardPlay.Target != null)
             {
-                await PowerCmd.Apply<EmpathyPower>(cardPlay.Target, 1m, base.Owner.Creature, this);
+                await PowerCmd.Apply<EmpathyPower>(choiceContext, cardPlay.Target, 1m, base.Owner.Creature, this);
             }
         }
         
@@ -58,3 +58,4 @@ public class FoundYou : YukiCardModel
         base.DynamicVars["Discard"].UpgradeValueBy(-1m);
     }
 }
+

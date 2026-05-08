@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -50,7 +50,7 @@ public class MemoryProbe : YukiCardModel
         
         
         CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-        await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+        await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
     }
 
     protected override void OnUpgrade()
@@ -59,3 +59,4 @@ public class MemoryProbe : YukiCardModel
         this.EnergyCost.SetCustomBaseCost(0);
     }
 }
+

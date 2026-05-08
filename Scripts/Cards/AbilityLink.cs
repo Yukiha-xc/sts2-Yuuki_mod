@@ -47,8 +47,8 @@ public class AbilityLink : YukiCardModel
         }
 
         
-        await PowerCmd.Apply<StrengthPower>(base.Owner.Creature, totalStr + 1m, base.Owner.Creature, this);
-        await PowerCmd.Apply<DexterityPower>(base.Owner.Creature, totalDex + 1m, base.Owner.Creature, this);
+        await PowerCmd.Apply<StrengthPower>(choiceContext, base.Owner.Creature, totalStr + 1m, base.Owner.Creature, this);
+        await PowerCmd.Apply<DexterityPower>(choiceContext, base.Owner.Creature, totalDex + 1m, base.Owner.Creature, this);
 
         await Cmd.Wait(0.25f);
     }
@@ -59,4 +59,5 @@ public class AbilityLink : YukiCardModel
         base.EnergyCost.UpgradeBy(-1);
     }
 }
+
 

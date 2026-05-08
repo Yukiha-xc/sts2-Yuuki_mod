@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -45,7 +45,7 @@ public class EmpathyOfCourage : YukiCardModel
         for (int i = 0; i < overloadCount; i++)
         {
             CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
         }
 
         await Cmd.Wait(0.25f);
@@ -57,4 +57,5 @@ public class EmpathyOfCourage : YukiCardModel
         base.DynamicVars["CapacityOverload"].UpgradeValueBy(-1m);
     }
 }
+
 

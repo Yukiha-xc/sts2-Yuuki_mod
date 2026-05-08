@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -41,7 +41,7 @@ public class CatchSnowball : YukiCardModel
         decimal nextBlockAmount = DynamicVars["NextBlock"].BaseValue;
         int turns = (int)base.DynamicVars["Turns"].BaseValue;
         
-        var power = await PowerCmd.Apply<CatchSnowballPower>(base.Owner.Creature, (decimal)turns, base.Owner.Creature, this);
+        var power = await PowerCmd.Apply<CatchSnowballPower>(choiceContext, base.Owner.Creature, (decimal)turns, base.Owner.Creature, this);
         if (power != null)
         {
             power.SetBlock(nextBlockAmount);
@@ -53,3 +53,4 @@ public class CatchSnowball : YukiCardModel
         base.DynamicVars["NextBlock"].UpgradeValueBy(3m);
     }
 }
+

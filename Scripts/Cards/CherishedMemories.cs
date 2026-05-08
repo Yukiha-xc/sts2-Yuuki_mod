@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,12 +34,16 @@ public class CherishedMemories : YukiCardModel
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
 
+        
+        bool targetHadEmpathy = cardPlay.Target.HasPower<EmpathyPower>();
+
         await MegaCrit.Sts2.Core.Commands.DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .Targeting(cardPlay.Target)
             .Execute(choiceContext);
 
-        if (cardPlay.Target.HasPower<EmpathyPower>())
+        
+        if (targetHadEmpathy)
         {
             CardPile discardPile = PileType.Discard.GetPile(base.Owner);
             var cardsInDiscard = discardPile.Cards.ToList();

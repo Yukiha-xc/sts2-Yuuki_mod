@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -32,8 +32,7 @@ public class ThrowSnowball : YukiCardModel
         {
             decimal weakAmount = DynamicVars["Weak"].BaseValue;
             
-            await PowerCmd.Apply<WeakPower>(
-                cardPlay.Target, 
+            await PowerCmd.Apply<WeakPower>(choiceContext, cardPlay.Target, 
                 weakAmount, 
                 Owner.Creature, 
                 this, 
@@ -48,3 +47,4 @@ public class ThrowSnowball : YukiCardModel
         DynamicVars["Weak"].UpgradeValueBy(1m);
     }
 }
+

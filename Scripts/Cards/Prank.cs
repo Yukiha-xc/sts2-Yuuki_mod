@@ -16,14 +16,13 @@ namespace yuuki.Scripts.Cards;
 [Pool(typeof(YukiPool))]
 public class Prank : YukiCardModel
 {
-    
     public Prank() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Weak", 1m),
-        new DynamicVar("StrengthLoss", 3m)
+        new DynamicVar("StrengthLoss", 4m)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -34,14 +33,14 @@ public class Prank : YukiCardModel
         decimal strengthLoss = base.DynamicVars["StrengthLoss"].BaseValue;
 
         
-        await PowerCmd.Apply<WeakPower>(base.Owner.Creature, weakAmount, base.Owner.Creature, this);
-        await PowerCmd.Apply<PrankPower>(base.Owner.Creature, strengthLoss, base.Owner.Creature, this);
+        await PowerCmd.Apply<WeakPower>(choiceContext, base.Owner.Creature, weakAmount, base.Owner.Creature, this);
+        await PowerCmd.Apply<PrankPower>(choiceContext, base.Owner.Creature, strengthLoss, base.Owner.Creature, this);
 
         
         foreach (Creature enemy in base.CombatState.HittableEnemies)
         {
-            await PowerCmd.Apply<WeakPower>(enemy, weakAmount, base.Owner.Creature, this);
-            await PowerCmd.Apply<PrankPower>(enemy, strengthLoss, base.Owner.Creature, this);
+            await PowerCmd.Apply<WeakPower>(choiceContext, enemy, weakAmount, base.Owner.Creature, this);
+            await PowerCmd.Apply<PrankPower>(choiceContext, enemy, strengthLoss, base.Owner.Creature, this);
         }
 
         await Cmd.Wait(0.25f);
@@ -50,6 +49,7 @@ public class Prank : YukiCardModel
     protected override void OnUpgrade()
     {
         
-        base.DynamicVars["StrengthLoss"].UpgradeValueBy(4m);
+        base.DynamicVars["StrengthLoss"].UpgradeValueBy(2m);
     }
 }
+

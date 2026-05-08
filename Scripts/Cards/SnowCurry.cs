@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -16,7 +16,6 @@ namespace yuuki.Scripts.Cards;
 [Pool(typeof(YukiPool))]
 public class SnowCurry : YukiCardModel
 {
-    
     public SnowCurry() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
     public override bool UsesSnowCrystals => true;
@@ -24,35 +23,40 @@ public class SnowCurry : YukiCardModel
     public override string PortraitPath => "res://yuuki/images/cards/ETC_FD_e004a.png";
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Strength", 1m)
+        new DynamicVar("YukiConsume", 3m)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        
-        if (YukiCrystalSystem.CurrentCrystals >= 2)
+        int consumeAmount = (int)base.DynamicVars["YukiConsume"].BaseValue;
+        if (YukiCrystalSystem.CurrentCrystals >= consumeAmount)
         {
-            YukiCrystalSystem.AddCrystals(-2);
+            YukiCrystalSystem.AddCrystals(-consumeAmount);
             
             
-            await PowerCmd.Apply<MegaCrit.Sts2.Core.Models.Powers.StrengthPower>(
+            await PowerCmd.Apply<MegaCrit.Sts2.Core.Models.Powers.StrengthPower>(choiceContext, base.Owner.Creature, 
+                1m, 
                 base.Owner.Creature, 
-                base.DynamicVars["Strength"].BaseValue, 
+                this
+            );
+            
+            
+            await PowerCmd.Apply<MegaCrit.Sts2.Core.Models.Powers.DexterityPower>(choiceContext, base.Owner.Creature, 
+                1m, 
                 base.Owner.Creature, 
                 this
             );
         }
     }
 
-    
-    protected override bool IsPlayable => YukiCrystalSystem.CurrentCrystals >= 2;
+    protected override bool IsPlayable => YukiCrystalSystem.CurrentCrystals >= (int)base.DynamicVars["YukiConsume"].BaseValue;
 
-    
     protected override bool ShouldGlowGoldInternal => IsPlayable;
 
     protected override void OnUpgrade()
     {
         
-        base.DynamicVars["Strength"].UpgradeValueBy(1m);
+        base.DynamicVars["YukiConsume"].UpgradeValueBy(-1m);
     }
 }
+

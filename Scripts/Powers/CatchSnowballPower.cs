@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -12,50 +12,46 @@ using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
 namespace yuuki.Scripts.Powers;
+
 public class CatchSnowballPower : CustomPowerModel
 {
-public override PowerType Type => PowerType.Buff;
+    public override PowerType Type => PowerType.Buff;
+    public override PowerStackType StackType => PowerStackType.Counter;
     
-public override PowerStackType StackType => PowerStackType.Counter;
     
-    
-protected override IEnumerable<DynamicVar> CanonicalVars => [
+    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
         new BlockVar(0m, ValueProp.Unpowered)
     ];
-protected override IEnumerable<IHoverTip> ExtraHoverTips => [
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [
         HoverTipFactory.Static(StaticHoverTip.Block)
     ];
 
-    
-public void SetBlock(decimal block)
+    public void SetBlock(decimal block)
     {
         AssertMutable();
-base.DynamicVars.Block.BaseValue = block;
+        base.DynamicVars.Block.BaseValue = block;
     }
-public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+
+    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        
-if (player ==
-base.Owner.Player &&
-base.AmountOnTurnStart > 0)
+        if (player == base.Owner.Player && base.AmountOnTurnStart > 0)
         {
             
-if (YukiCrystalSystem.CurrentCrystals >= 3)
+            if (YukiCrystalSystem.CurrentCrystals >= 3)
             {
-this.Flash();
+                this.Flash();
                 
-                
-await CreatureCmd.GainBlock(base.Owner,
-base.DynamicVars.Block, null);
+                await CreatureCmd.GainBlock(base.Owner, base.DynamicVars.Block, null);
             }
 
             
-await PowerCmd.Decrement(this);
+            await PowerCmd.Decrement(this);
         }
     }
-public override string CustomPackedIconPath => "res://yuuki/images/powers/CatchSnowballPower.png";
-public override string CustomBigIconPath => "res://yuuki/images/powers/CatchSnowballPower.png";
+
+    public override string CustomPackedIconPath => "res://yuuki/images/powers/CatchSnowballPower.png";
+    public override string CustomBigIconPath => "res://yuuki/images/powers/CatchSnowballPower.png";
 }
-
-
-

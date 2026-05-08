@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -18,8 +18,10 @@ public class BlizzardBallDamageVar : DamageVar
 
     public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target, bool runGlobalHooks)
     {
+        // 仅在战斗中应用雪晶加成
+        bool isInCombat = card.CombatState != null;
+        int crystals = isInCombat ? YukiCrystalSystem.CurrentCrystals : 0;
         
-        int crystals = YukiCrystalSystem.CurrentCrystals;
         decimal originalBase = card.IsUpgraded ? 13m : 9m;
         this.BaseValue = originalBase + (crystals * 2m);
         base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);

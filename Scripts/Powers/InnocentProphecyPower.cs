@@ -16,6 +16,9 @@ public class InnocentProphecyPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
+    
+    
+    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
@@ -23,17 +26,15 @@ public class InnocentProphecyPower : CustomPowerModel
         {
             Flash();
             
-            
-            
             await CardPileCmd.ShuffleIfNecessary(choiceContext, base.Owner.Player);
             var drawPile = PileType.Draw.GetPile(base.Owner.Player).Cards;
             
             if (drawPile.Any())
             {
-                
                 var sortedCards = drawPile.OrderBy(c => c.Rarity).ThenBy(c => c.Id).ToList();
                 
-                CardSelectorPrefs prefs = new CardSelectorPrefs(base.SelectionScreenPrompt, (int)base.Amount);
+                
+                CardSelectorPrefs prefs = new CardSelectorPrefs(base.SelectionScreenPrompt, 1);
                 var selectedCards = await CardSelectCmd.FromSimpleGrid(choiceContext, sortedCards, base.Owner.Player, prefs);
                 
                 if (selectedCards.Any())

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -28,7 +28,6 @@ public class FallingSnow : YukiCardModel
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        
         int amount = (int)DynamicVars[YukiCrystalVar.Key].BaseValue;
         YukiCrystalSystem.AddCrystals(amount);
         

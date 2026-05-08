@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -33,7 +33,7 @@ public class SpecialStarrySky : YukiCardModel
         
         foreach (var enemy in base.CombatState.HittableEnemies)
         {
-            await PowerCmd.Apply<DoomPower>(enemy, base.DynamicVars["Doom"].BaseValue, base.Owner.Creature, this);
+            await PowerCmd.Apply<DoomPower>(choiceContext, enemy, base.DynamicVars["Doom"].BaseValue, base.Owner.Creature, this);
         }
 
         
@@ -46,6 +46,7 @@ public class SpecialStarrySky : YukiCardModel
         base.DynamicVars["Energy"].UpgradeValueBy(1m);
     }
 }
+
 
 
 

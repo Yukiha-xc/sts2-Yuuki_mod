@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -28,8 +28,7 @@ public override string PortraitPath => "res://yuuki/images/cards/WalkingInTheSno
     {
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
         
-        await PowerCmd.Apply<SnowWalkPower>(
-            base.Owner.Creature, 
+        await PowerCmd.Apply<SnowWalkPower>(choiceContext, base.Owner.Creature, 
             1m, 
             base.Owner.Creature, 
             this
@@ -42,4 +41,5 @@ public override string PortraitPath => "res://yuuki/images/cards/WalkingInTheSno
         ((CardModel)this).EnergyCost.UpgradeBy(-1);
     }
 }
+
 

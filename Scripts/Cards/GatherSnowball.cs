@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -25,7 +25,7 @@ public class GatherSnowball : YukiCardModel
     public GatherSnowball() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self, true) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new PowerVar<GatherSnowballPower>("MagicNumber", 1m)
+        new YukiCrystalVar(1m)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => base.ExtraHoverTips.Concat(new IHoverTip[] {
@@ -37,14 +37,16 @@ public class GatherSnowball : YukiCardModel
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
         
-        YukiCrystalSystem.AddCrystals(1);
+        YukiCrystalSystem.AddCrystals((int)base.DynamicVars[YukiCrystalVar.Key].BaseValue);
 
-        int crystalAmount = (int)DynamicVars["MagicNumber"].BaseValue;
-        await PowerCmd.Apply<GatherSnowballPower>(base.Owner.Creature, (decimal)crystalAmount, base.Owner.Creature, this);
+        
+        await PowerCmd.Apply<GatherSnowballPower>(choiceContext, base.Owner.Creature, 2m, base.Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["MagicNumber"].UpgradeValueBy(1m);
+        
+        base.DynamicVars[YukiCrystalVar.Key].UpgradeValueBy(1m);
     }
 }
+

@@ -18,7 +18,7 @@ public class CrystalDamageVar : DamageVar
 
     public override void UpdateCardPreview(CardModel card, CardPreviewMode previewMode, Creature? target, bool runGlobalHooks)
     {
-        int crystals = yuuki.Scripts.YukiCrystalSystem.CurrentCrystals;
+        int crystals = (card.CombatState != null) ? yuuki.Scripts.YukiCrystalSystem.CurrentCrystals : 0;
         this.BaseValue = (decimal)(crystals * 2);
         base.UpdateCardPreview(card, previewMode, target, runGlobalHooks);
     }

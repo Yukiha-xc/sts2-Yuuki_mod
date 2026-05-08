@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -33,7 +33,7 @@ public class Watch : YukiCardModel
 
         if (cardPlay.Target != null)
         {
-            await PowerCmd.Apply<EmpathyPower>(cardPlay.Target, 1m, base.Owner.Creature, this);
+            await PowerCmd.Apply<EmpathyPower>(choiceContext, cardPlay.Target, 1m, base.Owner.Creature, this);
         }
 
         await Cmd.Wait(0.25f);

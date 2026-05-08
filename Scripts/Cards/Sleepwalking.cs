@@ -34,10 +34,10 @@ public class Sleepwalking : YukiCardModel
         await CreatureCmd.GainBlock(base.Owner.Creature, base.DynamicVars.Block.BaseValue, ValueProp.Move, cardPlay);
 
         
-        await PowerCmd.Apply<DexterityPower>(base.Owner.Creature, -1m, base.Owner.Creature, this);
+        await PowerCmd.Apply<DexterityPower>(choiceContext, base.Owner.Creature, -1m, base.Owner.Creature, this);
 
         
-        await PowerCmd.Apply<EnergyNextTurnPower>(base.Owner.Creature, 2m, base.Owner.Creature, this);
+        await PowerCmd.Apply<EnergyNextTurnPower>(choiceContext, base.Owner.Creature, 2m, base.Owner.Creature, this);
 
         await Cmd.Wait(0.25f);
     }
@@ -47,3 +47,4 @@ public class Sleepwalking : YukiCardModel
         base.DynamicVars.Block.UpgradeValueBy(3m);
     }
 }
+

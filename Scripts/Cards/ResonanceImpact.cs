@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -17,7 +17,7 @@ namespace yuuki.Scripts.Cards;
 [Pool(typeof(YukiPool))]
 public class ResonanceImpact : YukiCardModel
 {
-    public ResonanceImpact() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
+    public ResonanceImpact() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, true) { }
 
     public override bool UsesEmpathy => true;
     
@@ -33,17 +33,22 @@ public class ResonanceImpact : YukiCardModel
     {
         if (cardPlay.Target == null) return;
 
+        
+        bool targetHadEmpathy = cardPlay.Target.HasPower<EmpathyPower>();
+
+        
         await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .Targeting(cardPlay.Target)
             .Execute(choiceContext);
 
-        if (cardPlay.Target.HasPower<EmpathyPower>())
+        
+        if (targetHadEmpathy)
         {
             await PowerCmd.Remove<EmpathyPower>(cardPlay.Target);
             CardModel clone = CreateClone();
             clone.EnergyCost.SetThisCombat(0);
-            await CardPileCmd.AddGeneratedCardToCombat(clone, PileType.Discard, true);
+            await CardPileCmd.AddGeneratedCardToCombat(clone, PileType.Discard, null);
         }
     }
 
@@ -52,3 +57,4 @@ public class ResonanceImpact : YukiCardModel
         base.DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }
+

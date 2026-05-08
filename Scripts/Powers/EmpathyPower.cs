@@ -44,8 +44,49 @@ public class EmpathyPower : CustomPowerModel
                 if (blockToGain > 0)
                 {
                     this.Flash();
-                    await PowerCmd.Apply<BlockNextTurnPower>(player, blockToGain, player, null);
+                    await PowerCmd.Apply<BlockNextTurnPower>(new ThrowingPlayerChoiceContext(), player, blockToGain, player, null);
                 }
+            }
+        }
+    }
+
+    public override async Task AfterApplied(Creature? applier, CardModel? cardSource)
+    {
+        await base.AfterApplied(applier, cardSource);
+        
+        await TriggerEmpathyInMemoryDamage(base.Owner);
+    }
+
+    public override async Task AfterRemoved(Creature owner)
+    {
+        await base.AfterRemoved(owner);
+        
+        YukiCrystalSystem.AddCrystals(1);
+        
+        await TriggerEmpathyInMemoryDamage(owner);
+    }
+
+    private async Task TriggerEmpathyInMemoryDamage(Creature target)
+    {
+        
+        if (target == null || !target.IsAlive)
+        {
+            return;
+        }
+
+        var player = base.CombatState.PlayerCreatures.FirstOrDefault();
+        if (player != null && player.HasPower<EmpathyInMemoryPower>())
+        {
+            var memoryPower = player.GetPower<EmpathyInMemoryPower>();
+            
+            decimal damageValue = memoryPower.DynamicVars.Damage.BaseValue * memoryPower.Amount;
+            
+            
+            if (target.IsAlive)
+            {
+                this.Flash();
+                var choiceContext = new ThrowingPlayerChoiceContext();
+                await CreatureCmd.Damage(choiceContext, target, damageValue, ValueProp.Move, player, null);
             }
         }
     }
@@ -53,3 +94,4 @@ public class EmpathyPower : CustomPowerModel
     public override string CustomPackedIconPath => "res://yuuki/images/powers/EmpathyPower.png";
     public override string CustomBigIconPath => "res://yuuki/images/powers/EmpathyPower.png";
 }
+

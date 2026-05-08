@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Combat.History.Entries;
@@ -45,9 +45,10 @@ public sealed class OverloadResponsePower : CustomPowerModel
         
         
         CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(card.Owner);
-        await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+        await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
     }
 
     public override string CustomPackedIconPath => "res://yuuki/images/powers/OverloadResponsePower.png";
     public override string CustomBigIconPath => "res://yuuki/images/powers/OverloadResponsePower.png";
 }
+

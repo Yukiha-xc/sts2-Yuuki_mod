@@ -1,4 +1,4 @@
-﻿using BaseLib.Abstracts;
+using BaseLib.Abstracts;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -23,10 +23,11 @@ public sealed class PsychicGuardianPower : CustomPowerModel
             Flash();
             
             
-            await PlayerCmd.GainEnergy(1, base.Owner.Player);
+            
+            await PlayerCmd.GainEnergy((int)base.Amount, base.Owner.Player);
             
             
-            await CardPileCmd.Draw(choiceContext, base.Amount, base.Owner.Player);
+            await CardPileCmd.Draw(choiceContext, (int)base.Amount, base.Owner.Player);
         }
     }
 

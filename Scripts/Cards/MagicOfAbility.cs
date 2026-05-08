@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +33,7 @@ public class MagicOfAbility : YukiCardModel
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
- PowerCmd.Apply<MagicOfAbilityPower>(base.Owner.Creature, base.DynamicVars["Damage"].BaseValue, base.Owner.Creature, this);
+ PowerCmd.Apply<MagicOfAbilityPower>(choiceContext, base.Owner.Creature, base.DynamicVars["Damage"].BaseValue, base.Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
@@ -42,4 +42,5 @@ public class MagicOfAbility : YukiCardModel
         base.DynamicVars["Damage"].UpgradeValueBy(2m);
     }
 }
+
 

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -14,8 +14,10 @@ public sealed class SnowFairyChantPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
-
     
+    
+    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
+
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player == base.Owner.Player)
@@ -23,7 +25,6 @@ public sealed class SnowFairyChantPower : CustomPowerModel
             
             if (YukiCrystalSystem.CurrentCrystals >= 1)
             {
-                
                 YukiCrystalSystem.AddCrystals(-1);
                 Flash();
 
@@ -37,4 +38,3 @@ public sealed class SnowFairyChantPower : CustomPowerModel
     public override string CustomPackedIconPath => "res://yuuki/images/powers/SnowFairyChantPower.png";
     public override string CustomBigIconPath => "res://yuuki/images/powers/SnowFairyChantPower.png";
 }
-

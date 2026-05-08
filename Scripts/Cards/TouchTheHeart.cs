@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,7 +45,7 @@ public class TouchTheHeart : YukiCardModel
         {
             foreach (var enemy in base.CombatState.HittableEnemies)
             {
-                await PowerCmd.Apply<EmpathyPower>(enemy, 1m, base.Owner.Creature, this);
+                await PowerCmd.Apply<EmpathyPower>(choiceContext, enemy, 1m, base.Owner.Creature, this);
             }
         }
     }

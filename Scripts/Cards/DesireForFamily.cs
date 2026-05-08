@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -8,6 +9,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
+using yuuki.Scripts.Powers;
 
 namespace yuuki.Scripts.Cards;
 
@@ -18,19 +20,24 @@ public class DesireForFamily : YukiCardModel
 
     public override int CapacityOverload => 1;
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new CardsVar(3)
+        new CardsVar(2)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        this.ExhaustOnNextPlay = true;
-
         await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, base.Owner);
 
-        CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true));
+        
+        var aliveEnemies = base.CombatState.Enemies.Where(e => e.IsAlive).ToList();
+        if (aliveEnemies.Count > 0)
+        {
+            var target = aliveEnemies[base.Owner.RunState.Rng.Shuffle.NextInt(0, aliveEnemies.Count)];
+            await PowerCmd.Apply<EmpathyPower>(choiceContext, target, 1m, base.Owner.Creature, this);
+        }
         
         await Cmd.Wait(0.25f);
     }
@@ -40,3 +47,4 @@ public class DesireForFamily : YukiCardModel
         DynamicVars.Cards.UpgradeValueBy(1m);
     }
 }
+

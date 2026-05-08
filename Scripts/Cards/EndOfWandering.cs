@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -14,8 +14,7 @@ namespace yuuki.Scripts.Cards;
 [Pool(typeof(YukiPool))]
 public class EndOfWandering : YukiCardModel
 {
-    
-    public EndOfWandering() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self, true) 
+    public EndOfWandering() : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self, true) 
     {
     }
 
@@ -25,26 +24,22 @@ public class EndOfWandering : YukiCardModel
         new DynamicVar("CapacityOverload", 2m)
     ];
 
-    
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Retain];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        
         var handCards = PileType.Hand.GetPile(base.Owner).Cards;
 
         foreach (CardModel item in handCards)
         {
-            
             item.AddKeyword(CardKeyword.Retain);
         }
 
-        
         int overloadCount = CapacityOverload;
         for (int i = 0; i < overloadCount; i++)
         {
             CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
         }
         
         await Cmd.Wait(0.25f);
@@ -55,3 +50,4 @@ public class EndOfWandering : YukiCardModel
         base.DynamicVars["CapacityOverload"].UpgradeValueBy(-1m);
     }
 }
+

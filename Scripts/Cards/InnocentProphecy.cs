@@ -42,14 +42,14 @@ public class InnocentProphecy : YukiCardModel
         }
 
         
-        await PowerCmd.Apply<InnocentProphecyPower>(base.Owner.Creature, 1m, base.Owner.Creature, this);
+        await PowerCmd.Apply<InnocentProphecyPower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, this);
 
         
         int overloadCount = CapacityOverload;
         for (int i = 0; i < overloadCount; i++)
         {
             CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+            await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, null);
         }
         
         await Cmd.Wait(0.25f);
@@ -60,3 +60,5 @@ public class InnocentProphecy : YukiCardModel
         base.DynamicVars["CapacityOverload"].UpgradeValueBy(-1m);
     }
 }
+
+

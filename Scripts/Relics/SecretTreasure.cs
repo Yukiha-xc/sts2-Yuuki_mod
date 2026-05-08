@@ -42,8 +42,9 @@ public class SecretTreasure : CustomRelicModel
                 
                 this.Flash();
                 
-                await PowerCmd.Apply<EmpathyPower>(target, 1m, base.Owner.Creature, null);
+                await PowerCmd.Apply<EmpathyPower>(new ThrowingPlayerChoiceContext(), target, 1m, base.Owner.Creature, null);
             }
         }
     }
 }
+

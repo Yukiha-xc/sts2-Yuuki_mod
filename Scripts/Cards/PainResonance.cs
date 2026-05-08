@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -41,13 +41,17 @@ public class PainResonance : YukiCardModel
             {
                 await PowerCmd.Remove<EmpathyPower>(enemy);
 
-                await PowerCmd.Apply<WeakPower>(enemy, base.DynamicVars["WeakAmount"].BaseValue, base.Owner.Creature, this);
+                
+                if (enemy.IsAlive)
+                {
+                    await PowerCmd.Apply<WeakPower>(choiceContext, enemy, base.DynamicVars["WeakAmount"].BaseValue, base.Owner.Creature, this);
 
-                await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-                    .WithHitCount(2)
-                    .FromCard(this)
-                    .Targeting(enemy)
-                    .Execute(choiceContext);
+                    await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
+                        .WithHitCount(2)
+                        .FromCard(this)
+                        .Targeting(enemy)
+                        .Execute(choiceContext);
+                }
             }
         }
         else
@@ -63,3 +67,4 @@ public class PainResonance : YukiCardModel
         base.DynamicVars["WeakAmount"].UpgradeValueBy(1m);
     }
 }
+

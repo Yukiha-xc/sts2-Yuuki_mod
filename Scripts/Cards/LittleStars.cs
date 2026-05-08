@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -17,7 +17,6 @@ namespace yuuki.Scripts.Cards;
 [Pool(typeof(YukiPool))]
 public class LittleStars : YukiCardModel
 {
-    
     public LittleStars() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, true) { }
     
     public override string PortraitPath => "res://yuuki/images/cards/BG057_005.png";
@@ -25,8 +24,7 @@ public class LittleStars : YukiCardModel
     public override bool UsesEmpathy => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(3m, ValueProp.Move),
-        new IntVar("ExtraHits", 3m)
+        new DamageVar(4m, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -35,32 +33,38 @@ public class LittleStars : YukiCardModel
         if (target == null) return;
 
         bool hasEmpathy = target.HasPower<yuuki.Scripts.Powers.EmpathyPower>();
-        int totalHits = 2;
 
-        if (hasEmpathy)
+        
+        if (target.IsAlive)
         {
-            
-            await PowerCmd.Remove<yuuki.Scripts.Powers.EmpathyPower>(target);
-            
-            
-            totalHits += (int)base.DynamicVars["ExtraHits"].BaseValue;
+            await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
+                .FromCard(this)
+                .WithHitCount(2)
+                .Targeting(target)
+                .Execute(choiceContext);
         }
 
         
-        await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
-            .FromCard(this)
-            .WithHitCount(totalHits)
-            .Targeting(target)
-            .Execute(choiceContext);
+        if (hasEmpathy && target.IsAlive)
+        {
+            await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
+                .FromCard(this)
+                .WithHitCount(2)
+                .Targeting(target)
+                .Execute(choiceContext);
+
+            
+            if (target.IsAlive)
+            {
+                await PowerCmd.Remove<yuuki.Scripts.Powers.EmpathyPower>(target);
+            }
+        }
             
         await Cmd.Wait(0.25f);
     }
 
     protected override void OnUpgrade()
     {
-        
-        base.DynamicVars["ExtraHits"].UpgradeValueBy(1m);
+        base.DynamicVars.Damage.UpgradeValueBy(2m);
     }
 }
-
-

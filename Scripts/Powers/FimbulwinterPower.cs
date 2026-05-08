@@ -16,6 +16,9 @@ public class FimbulwinterPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
+    
+    
+    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
@@ -23,10 +26,11 @@ public class FimbulwinterPower : CustomPowerModel
         {
             Flash();
             
+            
             YukiCrystalSystem.AddCrystals(1);
             
             
-            int threshold = base.Amount;
+            int threshold = (int)base.Amount;
             if (YukiCrystalSystem.CurrentCrystals <= threshold)
             {
                 YukiCrystalSystem.AddCrystals(1);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -52,7 +53,20 @@ public class PureWhiteGift : CustomRelicModel
         
         else if (crystals >= 8)
         {
-            YukiCrystalSystem.CurrentCrystals = 8;
+            YukiCrystalSystem.AddCrystals(-2);
+            var combatState = MegaCrit.Sts2.Core.Combat.CombatManager.Instance.DebugOnlyGetState();
+            if (combatState != null)
+            {
+                var aliveEnemies = combatState.Enemies.Where(e => e.IsAlive).ToList();
+                if (aliveEnemies.Count > 0)
+                {
+                    var targets = aliveEnemies.Where(e => !e.HasPower<yuuki.Scripts.Powers.EmpathyPower>()).ToList();
+                    if (targets.Count == 0) targets = aliveEnemies;
+                    
+                    var randomEnemy = targets[new System.Random().Next(targets.Count)];
+                    await PowerCmd.Apply<yuuki.Scripts.Powers.EmpathyPower>(new ThrowingPlayerChoiceContext(), randomEnemy, 1m, player.Creature, null);
+                }
+            }
         }
     }
 
@@ -66,3 +80,4 @@ public class PureWhiteGift : CustomRelicModel
 
     public override RelicModel? GetUpgradeReplacement() => ModelDb.Relic<EternalGift>();
 }
+

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -29,12 +29,16 @@ public class SnowResonance : YukiCardModel
     {
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Attack", base.Owner.Character.AttackAnimDelay);
 
+        
+        bool targetHadEmpathy = cardPlay.Target != null && cardPlay.Target.HasPower<EmpathyPower>();
+
         await DamageCmd.Attack(base.DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .Targeting(cardPlay.Target)
             .Execute(choiceContext);
 
-        if (cardPlay.Target != null && cardPlay.Target.HasPower<EmpathyPower>())
+        
+        if (targetHadEmpathy)
         {
             YukiCrystalSystem.AddCrystals((int)base.DynamicVars[YukiCrystalVar.Key].BaseValue);
         }
@@ -44,6 +48,7 @@ public class SnowResonance : YukiCardModel
 
     protected override void OnUpgrade()
     {
-        base.DynamicVars.Damage.UpgradeValueBy(2m);
+        
+        base.DynamicVars[YukiCrystalVar.Key].UpgradeValueBy(1m);
     }
 }

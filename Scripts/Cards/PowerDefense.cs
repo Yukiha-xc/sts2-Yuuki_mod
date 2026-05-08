@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -24,7 +24,7 @@ public class PowerDefense : YukiCardModel
     {
         
         var handCards = PileType.Hand.GetPile(base.Owner).Cards;
-        var statusCards = handCards.Where(c => c.Type == CardType.Status).ToList();
+        var statusCards = handCards.Where(c => c.Type == CardType.Status || c.Type == CardType.Curse).ToList();
 
         int count = statusCards.Count;
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -47,7 +47,7 @@ public class AboutToMelt : YukiCardModel
         if (YukiCrystalSystem.CurrentCrystals < 5)
         {
             CardModel burn = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Burn>(base.Owner);
-            CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(burn, PileType.Draw, true));
+            CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(burn, PileType.Draw, null));
         }
 
         await Cmd.Wait(0.25f);
@@ -58,4 +58,5 @@ public class AboutToMelt : YukiCardModel
         base.DynamicVars.Damage.UpgradeValueBy(5m);
     }
 }
+
 

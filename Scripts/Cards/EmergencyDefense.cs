@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -20,7 +21,7 @@ public class EmergencyDefense : YukiCardModel
     public override bool GainsBlock => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(6m, ValueProp.Move)
+        new BlockVar(7m, ValueProp.Move)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips
@@ -34,10 +35,18 @@ public class EmergencyDefense : YukiCardModel
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        
         await CreatureCmd.GainBlock(base.Owner.Creature, base.DynamicVars.Block.BaseValue, ValueProp.Move, cardPlay);
 
-        CardModel dazedCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Dazed>(base.Owner);
-        CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(dazedCard, PileType.Discard, true));
+        
+        bool hasEmpathyEnemy = base.CombatState.Enemies.Any(e => e.IsAlive && e.HasPower<yuuki.Scripts.Powers.EmpathyPower>());
+        
+        
+        if (!hasEmpathyEnemy)
+        {
+            CardModel dazedCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Dazed>(base.Owner);
+            CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(dazedCard, PileType.Discard, null));
+        }
         
         await Cmd.Wait(0.25f);
     }
@@ -47,3 +56,4 @@ public class EmergencyDefense : YukiCardModel
         base.DynamicVars.Block.UpgradeValueBy(3m);
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -15,32 +15,31 @@ namespace yuuki.Scripts.Cards;
 [Pool(typeof(YukiPool))]
 public class Partner : YukiCardModel
 {
-    
-    public Partner() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
+    public Partner() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, true) { }
 
     public override bool UsesEmpathy => true;
 
-    
     public override string PortraitPath => "res://yuuki/images/cards/RINNE_e10b.png";
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Draw", 1m)
+        new CardsVar(1)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        int drawBase = (int)base.DynamicVars["Draw"].BaseValue;
-        
+        await CardPileCmd.Draw(choiceContext, base.DynamicVars.Cards.BaseValue, base.Owner);
+
         
         int empathyCount = base.CombatState.Enemies.Count(e => e.IsAlive && e.HasPower<EmpathyPower>());
         
-        int totalDraw = drawBase + empathyCount;
-        
-        if (totalDraw > 0)
+        if (empathyCount > 0)
         {
-            
-            await CardPileCmd.Draw(choiceContext, totalDraw, base.Owner);
+            await PowerCmd.Apply<MegaCrit.Sts2.Core.Models.Powers.StrengthPower>(choiceContext, base.Owner.Creature, 
+                (decimal)empathyCount, 
+                base.Owner.Creature, 
+                this
+            );
         }
 
         await Cmd.Wait(0.25f);
@@ -49,6 +48,7 @@ public class Partner : YukiCardModel
     protected override void OnUpgrade()
     {
         
-        base.DynamicVars["Draw"].UpgradeValueBy(1m);
+        base.EnergyCost.UpgradeBy(-1);
     }
 }
+

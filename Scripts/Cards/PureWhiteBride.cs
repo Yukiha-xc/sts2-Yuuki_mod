@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -30,7 +30,7 @@ public class PureWhiteBride : YukiCardModel
         {
             if (enemy.IsAlive)
             {
-                await PowerCmd.Apply<EmpathyPower>(enemy, 1m, base.Owner.Creature, this);
+                await PowerCmd.Apply<EmpathyPower>(choiceContext, enemy, 1m, base.Owner.Creature, this);
             }
         }
 
@@ -55,5 +55,7 @@ public class PureWhiteBride : YukiCardModel
     {
         
         base.EnergyCost.UpgradeBy(-1);
+        AddKeyword(CardKeyword.Innate);
     }
 }
+

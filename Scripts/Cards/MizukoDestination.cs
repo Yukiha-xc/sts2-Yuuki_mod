@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +24,6 @@ public class MizukoDestination : YukiCardModel
     public override int CapacityOverload => 1;
     public override bool GainsBlock => true;
 
-    
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
@@ -34,21 +33,34 @@ public class MizukoDestination : YukiCardModel
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        this.ExhaustOnNextPlay = true;
+        
+        int totalIntentDamage = 0;
+        foreach (Creature enemyCreature in base.CombatState.Enemies)
+        {
+            if (enemyCreature == null || enemyCreature.IsDead || enemyCreature.Monster == null || enemyCreature.Monster.NextMove == null) continue;
 
+            MonsterModel monster = enemyCreature.Monster;
+            foreach (AttackIntent intent in monster.NextMove.Intents.OfType<AttackIntent>())
+            {
+                totalIntentDamage += intent.GetTotalDamage(base.CombatState.PlayerCreatures.Cast<Creature>(), enemyCreature);
+            }
+        }
+        decimal finalBlockValue = Math.Floor((decimal)totalIntentDamage / 2m);
+        base.DynamicVars.Block.BaseValue = finalBlockValue;
+
+        
         await CreatureCmd.GainBlock(base.Owner.Creature, base.DynamicVars.Block.BaseValue, ValueProp.Move, cardPlay);
 
+        
         decimal blurAmount = base.DynamicVars["Power"].BaseValue;
-        await PowerCmd.Apply<BlurPower>(base.Owner.Creature, blurAmount, base.Owner.Creature, this);
-
-        CardModel voidCard = base.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(base.Owner);
-        await CardPileCmd.AddGeneratedCardToCombat(voidCard, PileType.Discard, true);
+        await PowerCmd.Apply<BlurPower>(choiceContext, base.Owner.Creature, blurAmount, base.Owner.Creature, this);
         
         await Cmd.Wait(0.25f);
     }
 
     protected override void OnUpgrade()
     {
+        
         base.DynamicVars["Power"].UpgradeValueBy(1m);
     }
 
@@ -83,3 +95,4 @@ public class MizukoDestination : YukiCardModel
         }
     }
 }
+

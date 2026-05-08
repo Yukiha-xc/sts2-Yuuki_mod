@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Commands;
@@ -15,16 +15,28 @@ public class GatherSnowballPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
+    
+    
+    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        if (player == base.Owner.Player && base.Amount != 0)
+        if (player == base.Owner.Player)
         {
             this.Flash();
-            YukiCrystalSystem.AddCrystals((int)this.Amount);
             
             
-            await PowerCmd.Remove(this);
+            YukiCrystalSystem.AddCrystals(1);
+            
+            
+            if (base.Amount > 1)
+            {
+                await PowerCmd.Decrement(this);
+            }
+            else
+            {
+                await PowerCmd.Remove(this);
+            }
         }
     }
 

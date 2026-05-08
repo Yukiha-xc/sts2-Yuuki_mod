@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -24,8 +24,9 @@ public class SnowDaughter : YukiCardModel
         await CreatureCmd.TriggerAnim(base.Owner.Creature, "Cast", base.Owner.Character.CastAnimDelay);
 
         
-        await PowerCmd.Apply<yuuki.Scripts.Powers.SnowDaughterPower>(
-            base.Owner.Creature, 
+        YukiCrystalSystem.AddCrystals(2);
+
+        await PowerCmd.Apply<yuuki.Scripts.Powers.SnowDaughterPower>(choiceContext, base.Owner.Creature, 
             base.DynamicVars["MagicNumber"].BaseValue, 
             base.Owner.Creature, 
             this
@@ -38,3 +39,4 @@ public class SnowDaughter : YukiCardModel
         base.DynamicVars["MagicNumber"].UpgradeValueBy(2m);
     }
 }
+

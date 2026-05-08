@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -42,8 +42,7 @@ public class SnowFairyChant : YukiCardModel
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        await PowerCmd.Apply<SnowFairyChantPower>(
-            base.Owner.Creature, 
+        await PowerCmd.Apply<SnowFairyChantPower>(choiceContext, base.Owner.Creature, 
             base.DynamicVars["MagicNumber"].BaseValue, 
             base.Owner.Creature, 
             this
@@ -57,3 +56,4 @@ public class SnowFairyChant : YukiCardModel
         base.DynamicVars["MagicNumber"].UpgradeValueBy(1m);
     }
 }
+

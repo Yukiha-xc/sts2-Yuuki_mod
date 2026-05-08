@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Combat;
@@ -23,7 +23,7 @@ public class SnowAbsorptionPower : CustomPowerModel
         {
             Flash();
             
-            await PowerCmd.Apply<StrengthPower>(base.Owner, (decimal)(-base.Amount), base.Owner, null);
+            await PowerCmd.Apply<StrengthPower>(choiceContext, base.Owner, (decimal)(-base.Amount), base.Owner, null);
             await PowerCmd.Remove(this);
         }
     }
@@ -31,3 +31,4 @@ public class SnowAbsorptionPower : CustomPowerModel
     public override string CustomPackedIconPath => "res://yuuki/images/powers/energy_icon_small.png";
     public override string CustomBigIconPath => "res://yuuki/images/powers/energy_icon_small.png";
 }
+

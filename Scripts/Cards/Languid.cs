@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -29,15 +29,13 @@ public class Languid : YukiCardModel
     {
         await CreatureCmd.GainBlock(base.Owner.Creature, base.DynamicVars["Block"].BaseValue, ValueProp.Move, cardPlay);
 
-        await PowerCmd.Apply<DrawCardsNextTurnPower>(
-            base.Owner.Creature, 
+        await PowerCmd.Apply<DrawCardsNextTurnPower>(choiceContext, base.Owner.Creature, 
             base.DynamicVars["Cards"].BaseValue, 
             base.Owner.Creature, 
             this
         );
 
-        await PowerCmd.Apply<EnergyNextTurnPower>(
-            base.Owner.Creature, 
+        await PowerCmd.Apply<EnergyNextTurnPower>(choiceContext, base.Owner.Creature, 
             base.DynamicVars["Energy"].BaseValue, 
             base.Owner.Creature, 
             this
@@ -53,3 +51,4 @@ public class Languid : YukiCardModel
         base.DynamicVars["Block"].UpgradeValueBy(4m);
     }
 }
+

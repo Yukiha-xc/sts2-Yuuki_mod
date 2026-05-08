@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,6 +56,11 @@ public static class YukiCrystalSystem
         _snowCrystals = 0;
         MaxSnowCrystals = 9;
         ConsumedCrystalsThisCombat = 0;
+        
+        OnCrystalsChanged = null;
+        OnMaxCrystalsChanged = null;
+        OnCrystalGained = null;
+
         OnCrystalsChanged?.Invoke(0);
     }
 
@@ -166,25 +171,32 @@ public static class EnergyCounterDisplayPatch
 
     private static void ConnectSignals(Control root)
     {
-        root.MouseEntered += () => ShowTip(root, "YUUKI_ENERGY");
+        root.MouseEntered += () => ShowTip(root, "YUUKI_ENERGY", false);
         root.MouseExited += HideTip;
 
         var crystalBg = root.GetNodeOrNull<Control>("%SnowCrystalBg");
         if (crystalBg != null)
         {
-            crystalBg.MouseEntered += () => ShowTip(crystalBg, "YUUKI_SNOW_CRYSTAL");
+            crystalBg.MouseEntered += () => ShowTip(crystalBg, "YUUKI_SNOW_CRYSTAL", true);
             crystalBg.MouseExited += HideTip;
         }
     }
 
-    private static void ShowTip(Control target, string key)
+    private static void ShowTip(Control target, string key, bool includeEmpathy)
     {
         try
         {
             var title = new LocString("static_hover_tips", $"{key}.title");
             var desc = new LocString("static_hover_tips", $"{key}.description");
             var tip = new HoverTip(title, desc, null);
-            NHoverTipSet.CreateAndShow(target, new List<IHoverTip> { tip }, HoverTipAlignment.None);
+            
+            var tipsList = new List<IHoverTip> { tip };
+            if (includeEmpathy)
+            {
+                tipsList.Add(HoverTipFactory.FromPower<yuuki.Scripts.Powers.EmpathyPower>());
+            }
+            
+            NHoverTipSet.CreateAndShow(target, tipsList, HoverTipAlignment.None);
         }
         catch (Exception e)
         {
@@ -195,5 +207,14 @@ public static class EnergyCounterDisplayPatch
     private static void HideTip()
     {
         NHoverTipSet.Clear();
+    }
+}
+
+[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Combat.CombatManager), "EndCombatInternal")]
+public static class EndCombatResetPatch
+{
+    public static void Postfix()
+    {
+        YukiCrystalSystem.Reset();
     }
 }

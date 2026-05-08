@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
@@ -24,8 +24,7 @@ public class NightSkyOfPowerUser : YukiCardModel
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         
-        await PowerCmd.Apply<NightSkyOfPowerUserPower>(
-            base.Owner.Creature, 
+        await PowerCmd.Apply<NightSkyOfPowerUserPower>(choiceContext, base.Owner.Creature, 
             base.DynamicVars["DamageInc"].BaseValue, 
             base.Owner.Creature, 
             this
@@ -40,3 +39,4 @@ public class NightSkyOfPowerUser : YukiCardModel
         base.DynamicVars["DamageInc"].UpgradeValueBy(25m);
     }
 }
+

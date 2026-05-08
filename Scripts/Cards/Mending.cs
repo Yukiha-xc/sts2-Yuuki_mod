@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
@@ -38,7 +38,7 @@ public class Mending : YukiCardModel
             YukiCrystalSystem.AddCrystals(-1);
 
             int vigorAmount = (int)DynamicVars["VigorPower"].BaseValue;
-            await PowerCmd.Apply<VigorPower>(base.Owner.Creature, (decimal)vigorAmount, base.Owner.Creature, this);
+            await PowerCmd.Apply<VigorPower>(choiceContext, base.Owner.Creature, (decimal)vigorAmount, base.Owner.Creature, this);
         }
     }
 
@@ -47,3 +47,4 @@ public class Mending : YukiCardModel
         DynamicVars["VigorPower"].UpgradeValueBy(2m);
     }
 }
+
