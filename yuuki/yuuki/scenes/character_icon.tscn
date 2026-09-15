@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0x0x0x0x0x0x"]
+
+[ext_resource type="Texture2D" path="res://yuuki/images/ui/yuuki_icon.png" id="1_icon"]
+
+[node name="CharacterIcon" type="TextureRect"]
+custom_minimum_size = Vector2(52, 52)
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 44.0
+offset_bottom = 44.0
+texture = ExtResource("1_icon")
+expand_mode = 1
+stretch_mode = 5

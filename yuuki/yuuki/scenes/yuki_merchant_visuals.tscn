@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://yuuki/images/ui/yuki_standing.png" id="1_yuki"]
+
+[node name="YukiMerchantVisuals" type="Node2D"]
+
+[node name="SpineSprite" type="TextureRect" parent="."]
+offset_left = -250.0
+offset_top = -450.0
+offset_right = 250.0
+offset_bottom = 50.0
+texture = ExtResource("1_yuki")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ControlRoot" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Hitbox" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = -200.0
+offset_top = -400.0
+offset_right = 200.0
+offset_bottom = 0.0

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://yuuki/images/ui/yuuki2.png" id="1_yuuki"]
+
+[node name="YukiStaticVisuals" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -180)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_yuuki")
