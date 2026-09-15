@@ -37,7 +37,12 @@ public sealed class OverloadResponsePower : CustomPowerModel
 
 	public override async Task AfterModifyingCardPlayCount(CardModel card)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		this.Flash();
-		await CardPileCmd.AddGeneratedCardToCombat(this.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(card.Owner), PileType.Discard, null);
+		await CardPileCmd.AddGeneratedCardToCombat(combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(card.Owner), PileType.Discard, null);
 	}
 }

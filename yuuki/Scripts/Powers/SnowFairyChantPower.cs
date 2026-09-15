@@ -24,7 +24,7 @@ public sealed class SnowFairyChantPower : CustomPowerModel
 	{
 		if (player == this.Owner.Player && YukiCrystalSystem.CurrentCrystals >= 1)
 		{
-			YukiCrystalSystem.AddCrystals(-1);
+			await YukiCrystalSystem.AddCrystals(-1);
 			this.Flash();
 			int amount = this.Amount;
 			await CardPileCmd.Draw(choiceContext, amount, player);

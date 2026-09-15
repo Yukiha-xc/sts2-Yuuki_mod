@@ -26,13 +26,18 @@ public class EmpathyOfCourage : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("CapacityOverload", 1m)];
 
 	public EmpathyOfCourage()
-		: base(0, (CardType)2, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		int num = this.CombatState.Enemies.Count((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
+		int num = combatState.Enemies.Count((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
 		if (num > 0)
 		{
 			await PlayerCmd.GainEnergy((decimal)(num * 2), this.Owner);
@@ -40,7 +45,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Cap
 		int overloadCount = CapacityOverload;
 		for (int i = 0; i < overloadCount; i++)
 		{
-			await CardPileCmd.AddGeneratedCardToCombat(this.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), (PileType)3, (Player)null, (CardPilePosition)1);
+			await CardPileCmd.AddGeneratedCardToCombat(combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), PileType.Discard, null, CardPilePosition.Bottom);
 		}
 		await Cmd.Wait(0.25f, false);
 	}

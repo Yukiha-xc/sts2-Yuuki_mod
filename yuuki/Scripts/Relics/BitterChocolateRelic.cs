@@ -39,7 +39,7 @@ public sealed class BitterChocolateRelic : CustomRelicModel
             
             if (combatState.HittableEnemies.Count > 0)
             {
-                await CreatureCmd.Damage(choiceContext, combatState.HittableEnemies, 8m, ValueProp.Unpowered, base.Owner.Creature, null);
+                await CreatureCmd.Damage(choiceContext, combatState.HittableEnemies, 8m, ValueProp.Unpowered, base.Owner.Creature);
             }
         }
     }

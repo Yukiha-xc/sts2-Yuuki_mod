@@ -13,11 +13,11 @@ public class FallingSnow : YukiCardModel
 {
 	private const int energyCost = 1;
 
-	private const CardType type = (CardType)2;
+	private const CardType type = CardType.Skill;
 
-	private const CardRarity rarity = (CardRarity)1;
+	private const CardRarity rarity = CardRarity.Basic;
 
-	private const TargetType targetType = (TargetType)0;
+	private const TargetType targetType = TargetType.None;
 
 	private const bool shouldShowInCardLibrary = true;
 
@@ -26,14 +26,13 @@ public class FallingSnow : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new YukiCrystalVar(2m)];
 
 	public FallingSnow()
-		: base(1, (CardType)2, (CardRarity)1, (TargetType)0, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Basic, TargetType.None, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		YukiCrystalSystem.AddCrystals((int)this.DynamicVars["YukiCrystal"].BaseValue);
-		await Task.CompletedTask;
+		await YukiCrystalSystem.AddCrystals((int)this.DynamicVars["YukiCrystal"].BaseValue);
 	}
 
 	protected override void OnUpgrade()

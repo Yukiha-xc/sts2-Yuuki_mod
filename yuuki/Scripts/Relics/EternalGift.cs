@@ -6,6 +6,7 @@ using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -27,7 +28,7 @@ public class EternalGift : CustomRelicModel
 
 	public override RelicRarity Rarity => RelicRarity.Ancient;
 
-	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
 	{
 		if (dealer == null || !dealer.IsPlayer || target == null || target.IsPlayer)
 		{
@@ -47,11 +48,16 @@ public class EternalGift : CustomRelicModel
 
 	public override async Task AfterPlayerTurnStartEarly(PlayerChoiceContext choiceContext, Player player)
 	{
+		if (player != this.Owner)
+		{
+			return;
+		}
+
 		int currentCrystals = YukiCrystalSystem.CurrentCrystals;
 		if (currentCrystals < 3)
 		{
 			await CardPileCmd.Draw(choiceContext, 1m, player);
-			YukiCrystalSystem.AddCrystals(2);
+			await YukiCrystalSystem.AddCrystals(2);
 		}
 		else
 		{
@@ -59,8 +65,8 @@ public class EternalGift : CustomRelicModel
 			{
 				return;
 			}
-			YukiCrystalSystem.AddCrystals(-2);
-			CombatState combatState = CombatManager.Instance.DebugOnlyGetState();
+			await YukiCrystalSystem.AddCrystals(-2);
+			CombatState? combatState = CombatManager.Instance.DebugOnlyGetState();
 			if (combatState == null)
 			{
 				return;
@@ -73,8 +79,11 @@ public class EternalGift : CustomRelicModel
 				{
 					list2 = list;
 				}
-				Creature target = player.RunState.Rng.CombatTargets.NextItem(list2);
-				await PowerCmd.Apply<EmpathyPower>((PlayerChoiceContext)new ThrowingPlayerChoiceContext(), target, 1m, player.Creature, (CardModel?)null, false);
+				Creature? target = player.RunState.Rng.CombatTargets.NextItem(list2);
+				if (target is not null)
+				{
+					await PowerCmd.Apply<EmpathyPower>(new ThrowingPlayerChoiceContext(), target, 1m, player.Creature, null, false);
+				}
 			}
 		}
 	}
@@ -82,8 +91,7 @@ public class EternalGift : CustomRelicModel
 	public override async Task BeforeCombatStart()
 	{
 		YukiCrystalSystem.Reset();
-		YukiCrystalSystem.AddCrystals(6);
-		await Task.CompletedTask;
+		await YukiCrystalSystem.AddCrystals(6);
 	}
 
 	public EternalGift()

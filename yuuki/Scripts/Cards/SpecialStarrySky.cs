@@ -16,8 +16,8 @@ public class SpecialStarrySky : YukiCardModel
 {
 	public override IEnumerable<CardKeyword> CanonicalKeywords => new _003C_003Ez__ReadOnlyArray<CardKeyword>((CardKeyword[])(object)new CardKeyword[2]
 	{
-		(CardKeyword)5,
-		(CardKeyword)1
+		CardKeyword.Retain,
+		CardKeyword.Exhaust
 	});
 
 	public override string PortraitPath => "res://yuuki/images/cards/StarrySky.png";
@@ -29,13 +29,18 @@ public class SpecialStarrySky : YukiCardModel
 	});
 
 	public SpecialStarrySky()
-		: base(0, (CardType)2, (CardRarity)7, (TargetType)3, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Token, TargetType.AllEnemies, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		foreach (Creature hittableEnemy in this.CombatState.HittableEnemies)
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
+		foreach (Creature hittableEnemy in combatState.HittableEnemies)
 		{
 			await PowerCmd.Apply<DoomPower>(choiceContext, hittableEnemy, this.DynamicVars["Doom"].BaseValue, this.Owner.Creature, (CardModel)this, false);
 		}

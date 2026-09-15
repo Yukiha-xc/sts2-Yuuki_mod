@@ -19,15 +19,20 @@ public class BlizzardBall : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new BlizzardBallDamageVar(7m)];
 
 	public BlizzardBall()
-		: base(2, (CardType)1, (CardRarity)2, (TargetType)3, shouldShowInCardLibrary: true)
+		: base(2, CardType.Attack, CardRarity.Common, TargetType.AllEnemies, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		await CreatureCmd.TriggerAnim(this.Owner.Creature, "Cast", this.Owner.Character.CastAnimDelay);
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).TargetingAllOpponents(this.CombatState)
-			.WithHitFx("vfx/vfx_attack_blunt", (string)null, "heavy_attack.mp3")
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(combatState)
+			.WithHitFx("vfx/vfx_attack_blunt", null, "heavy_attack.mp3")
 			.Execute(choiceContext);
 	}
 

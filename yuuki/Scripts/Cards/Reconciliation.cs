@@ -24,15 +24,20 @@ public class Reconciliation : YukiCardModel
 	public override bool UsesEmpathy => true;
 
 	public Reconciliation()
-		: base(1, (CardType)2, (CardRarity)4, (TargetType)3, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Rare, TargetType.AllEnemies, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		decimal baseAmount = this.DynamicVars["BasePower"].BaseValue;
 		decimal bonusAmount = this.DynamicVars["BonusPower"].BaseValue;
-		foreach (Creature enemy in this.CombatState.HittableEnemies)
+		foreach (Creature enemy in combatState.HittableEnemies)
 		{
 			decimal totalAmount = baseAmount;
 			if (enemy.HasPower<EmpathyPower>())

@@ -24,7 +24,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Yuk
 	protected override bool ShouldGlowGoldInternal => this.IsPlayable;
 
 	public SnowCurry()
-		: base(0, (CardType)2, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -33,7 +33,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Yuk
 		int num = (int)this.DynamicVars["YukiConsume"].BaseValue;
 		if (YukiCrystalSystem.CurrentCrystals >= num)
 		{
-			YukiCrystalSystem.AddCrystals(-num);
+			await YukiCrystalSystem.AddCrystals(-num);
 			await PowerCmd.Apply<StrengthPower>(choiceContext, this.Owner.Creature, 1m, this.Owner.Creature, (CardModel)this, false);
 			await PowerCmd.Apply<DexterityPower>(choiceContext, this.Owner.Creature, 1m, this.Owner.Creature, (CardModel)this, false);
 		}

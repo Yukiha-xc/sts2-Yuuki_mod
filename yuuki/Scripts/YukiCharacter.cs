@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using BaseLib.Abstracts;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
@@ -13,7 +12,7 @@ namespace yuuki.Scripts;
 public class YukiCharacter : PlaceholderCharacterModel
 {
 	private static readonly string[] SelectSounds = new string[3] { "res://yuuki/audio/yuki_select.ogg", "res://yuuki/audio/001300540.ogg", "res://yuuki/audio/001300620.ogg" };
-	private string _cachedSfx;
+	private string _cachedSfx = SelectSounds[0];
 	private ulong _lastSfxTime = 0;
 
 	public override string PlaceholderID => "YUUKI";
@@ -22,6 +21,7 @@ public class YukiCharacter : PlaceholderCharacterModel
 	public override CharacterGender Gender => CharacterGender.Feminine;
 	public override int StartingHp => 70;
 	public override string CustomVisualPath => "res://yuuki/scenes/yuki_visuals.tscn";
+	public override string CustomTrailPath => "res://scenes/vfx/card_trail_ironclad.tscn";
 	public override string CustomIconTexturePath => "res://yuuki/images/ui/yuuki_icon.png";
 	public override string CustomIconPath => "res://yuuki/scenes/character_icon.tscn";
 	public override string CustomEnergyCounterPath => "res://yuuki/scenes/yuki_energy_counter.tscn";
@@ -47,7 +47,7 @@ public class YukiCharacter : PlaceholderCharacterModel
 			ulong currentTime = Time.GetTicksMsec();
 			if (currentTime - _lastSfxTime > 500)
 			{
-				_cachedSfx = SelectSounds[new Random().Next(SelectSounds.Length)];
+				_cachedSfx = SelectSounds[Random.Shared.Next(SelectSounds.Length)];
 				_lastSfxTime = currentTime;
 			}
 			return _cachedSfx;
@@ -79,15 +79,13 @@ public class YukiCharacter : PlaceholderCharacterModel
 
 	public override List<string> GetArchitectAttackVfx()
 	{
-		int num = 5;
-		List<string> list = new List<string>(num);
-		CollectionsMarshal.SetCount(list, num);
-		Span<string> span = CollectionsMarshal.AsSpan(list);
-		span[0] = "vfx/vfx_attack_blunt";
-		span[1] = "vfx/vfx_heavy_blunt";
-		span[2] = "vfx/vfx_attack_slash";
-		span[3] = "vfx/vfx_bloody_impact";
-		span[4] = "vfx/vfx_rock_shatter";
-		return list;
+		return
+		[
+			"vfx/vfx_attack_blunt",
+			"vfx/vfx_heavy_blunt",
+			"vfx/vfx_attack_slash",
+			"vfx/vfx_bloody_impact",
+			"vfx/vfx_rock_shatter"
+		];
 	}
 }

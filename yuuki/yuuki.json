@@ -2,15 +2,15 @@
     "id": "yuuki",
     "name": "雪雪mod",
     "author": "Yukiha_yuuki",
-    "description": "基于星辰恋曲的白色永恒制作的mod",
-    "version": "1.5.0",
-    "min_game_version": "0.105.0",
+    "description": "杀戮尖塔0.111.0版本适配与更新",
+    "version": "1.6.0",
+    "min_game_version": "0.111.0",
     "has_pck": true,
     "has_dll": true,
     "dependencies": [
         {
             "id": "BaseLib",
-            "min_version": "3.1.2"
+            "min_version": "3.4.7"
         }
     ],
     "affects_gameplay": true

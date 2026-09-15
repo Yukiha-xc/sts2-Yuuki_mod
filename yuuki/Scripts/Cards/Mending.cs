@@ -28,7 +28,7 @@ public class Mending : YukiCardModel
 	protected override IEnumerable<IHoverTip> ExtraHoverTips => base.ExtraHoverTips.Concat((IEnumerable<IHoverTip>)(object)new IHoverTip[1] { HoverTipFactory.FromPower<VigorPower>((int?)null) });
 
 	public Mending()
-		: base(0, (CardType)2, (CardRarity)2, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Common, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -36,7 +36,7 @@ public class Mending : YukiCardModel
 	{
 		if (YukiCrystalSystem.CurrentCrystals >= 1)
 		{
-			YukiCrystalSystem.AddCrystals(-1);
+			await YukiCrystalSystem.AddCrystals(-1);
 			int num = (int)this.DynamicVars["VigorPower"].BaseValue;
 			await PowerCmd.Apply<VigorPower>(choiceContext, this.Owner.Creature, (decimal)num, this.Owner.Creature, (CardModel)this, false);
 		}

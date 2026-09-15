@@ -25,16 +25,16 @@ public class Languid : YukiCardModel
 	});
 
 	public Languid()
-		: base(2, (CardType)2, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		await CreatureCmd.GainBlock(this.Owner.Creature, this.DynamicVars["Block"].BaseValue, (ValueProp)8, cardPlay, false);
+		await CreatureCmd.GainBlock(this.Owner.Creature, this.DynamicVars["Block"].BaseValue, ValueProp.Move, cardPlay, false);
 		await PowerCmd.Apply<DrawCardsNextTurnPower>(choiceContext, this.Owner.Creature, this.DynamicVars["Cards"].BaseValue, this.Owner.Creature, (CardModel)this, false);
 		await PowerCmd.Apply<EnergyNextTurnPower>(choiceContext, this.Owner.Creature, this.DynamicVars["Energy"].BaseValue, this.Owner.Creature, (CardModel)this, false);
-		PlayerCmd.EndTurn(this.Owner, false, (Func<Task>)null);
+		PlayerCmd.EndTurn(this.Owner, false, null);
 		await Cmd.Wait(0.25f, false);
 	}
 

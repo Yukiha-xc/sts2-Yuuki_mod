@@ -19,7 +19,7 @@ public class Relief : YukiCardModel
 	public class ReliefBlockVar : BlockVar
 	{
 		public ReliefBlockVar(decimal baseVal)
-			: base(baseVal, (ValueProp)8)
+			: base(baseVal, ValueProp.Move)
 		{
 		}
 
@@ -44,13 +44,13 @@ public class Relief : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new ReliefBlockVar(9m)];
 
 	public Relief()
-		: base(1, (CardType)2, (CardRarity)2, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Common, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		await CreatureCmd.GainBlock(this.Owner.Creature, ((DynamicVar)this.DynamicVars.Block).BaseValue, (ValueProp)8, cardPlay, false);
+		await CreatureCmd.GainBlock(this.Owner.Creature, ((DynamicVar)this.DynamicVars.Block).BaseValue, ValueProp.Move, cardPlay, false);
 		await Cmd.Wait(0.25f, false);
 	}
 

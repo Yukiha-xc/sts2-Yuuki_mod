@@ -61,7 +61,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new EnergyVar(1)];
                 await CardPileCmd.Draw(choiceContext, 1, player);
                 
                 CardSelectorPrefs prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, 0, 1);
-                CardModel cardToExhaust = (await CardSelectCmd.FromHand(prefs: prefs, context: choiceContext, player: player, filter: null, source: this)).FirstOrDefault();
+                CardModel? cardToExhaust = (await CardSelectCmd.FromHand(prefs: prefs, context: choiceContext, player: player, filter: null, source: this)).FirstOrDefault();
                 
                 if (cardToExhaust != null)
                 {

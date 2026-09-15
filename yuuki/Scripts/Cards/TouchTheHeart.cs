@@ -19,30 +19,30 @@ public class TouchTheHeart : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new DamageVar(4m, (ValueProp)8),
+		(DynamicVar)new DamageVar(4m, ValueProp.Move),
 		new DynamicVar("Hits", 2m)
 	});
 
 	public TouchTheHeart()
-		: base(1, (CardType)1, (CardRarity)3, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		if (cardPlay.Target == null)
+		if (cardPlay.Target is not { } target || this.CombatState is not { } combatState)
 		{
 			return;
 		}
-		bool targetHadEmpathy = cardPlay.Target.HasPower<EmpathyPower>();
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).WithHitCount((int)this.DynamicVars["Hits"].BaseValue).FromCard((CardModel)this)
-			.Targeting(cardPlay.Target)
+		bool targetHadEmpathy = target.HasPower<EmpathyPower>();
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).WithHitCount((int)this.DynamicVars["Hits"].BaseValue).FromCard(this, cardPlay)
+			.Targeting(target)
 			.Execute(choiceContext);
 		if (!targetHadEmpathy)
 		{
 			return;
 		}
-		foreach (Creature hittableEnemy in this.CombatState.HittableEnemies)
+		foreach (Creature hittableEnemy in combatState.HittableEnemies)
 		{
 			await PowerCmd.Apply<EmpathyPower>(choiceContext, hittableEnemy, 1m, this.Owner.Creature, (CardModel)this, false);
 		}

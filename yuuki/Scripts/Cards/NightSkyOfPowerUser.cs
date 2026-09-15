@@ -16,7 +16,7 @@ public class NightSkyOfPowerUser : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new IntVar("DamageInc", 25m)];
 
 	public NightSkyOfPowerUser()
-		: base(2, (CardType)3, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(2, CardType.Power, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

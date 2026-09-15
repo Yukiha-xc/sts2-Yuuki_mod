@@ -18,20 +18,20 @@ public class RabbitCleaver : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new DamageVar(17m, (ValueProp)8),
+		(DynamicVar)new DamageVar(17m, ValueProp.Move),
 		(DynamicVar)new IntVar("Decrease", 5m)
 	});
 
 	public RabbitCleaver()
-		: base(1, (CardType)1, (CardRarity)3, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
 		ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(cardPlay.Target)
-			.WithHitFx("vfx/vfx_attack_blunt", (string)null, "blunt_attack.mp3")
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target)
+			.WithHitFx("vfx/vfx_attack_blunt", null, "blunt_attack.mp3")
 			.Execute(choiceContext);
 		_reduction += this.DynamicVars["Decrease"].IntValue;
 		UpdateDamage();

@@ -33,7 +33,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new Pow
 	}
 
 	public SnowFairyChant()
-		: base(0, (CardType)3, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Power, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

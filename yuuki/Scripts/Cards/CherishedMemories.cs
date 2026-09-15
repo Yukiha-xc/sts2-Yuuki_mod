@@ -33,10 +33,10 @@ public class CherishedMemories : YukiCardModel
 		}
 	}
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(8m, (ValueProp)8)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(8m, ValueProp.Move)];
 
 	public CherishedMemories()
-		: base(1, (CardType)1, (CardRarity)2, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -44,13 +44,13 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new Dam
 	{
 		ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
 		bool targetHadEmpathy = cardPlay.Target.HasPower<EmpathyPower>();
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(cardPlay.Target)
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target)
 			.Execute(choiceContext);
 		if (!targetHadEmpathy)
 		{
 			return;
 		}
-		List<CardModel> list = PileTypeExtensions.GetPile((PileType)3, this.Owner).Cards.ToList();
+		List<CardModel> list = PileTypeExtensions.GetPile(PileType.Discard, this.Owner).Cards.ToList();
 		if (list.Count > 0)
 		{
 			LocString val = new LocString("ui", "TEXT_SELECT_CARD");
@@ -58,7 +58,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new Dam
 			IEnumerable<CardModel> enumerable = await CardSelectCmd.FromSimpleGrid(choiceContext, (IReadOnlyList<CardModel>)list, this.Owner, val2);
 			if (enumerable != null && enumerable.Any())
 			{
-				await CardPileCmd.Add(enumerable.First(), (PileType)2, (CardPilePosition)1, (AbstractModel)null, false);
+				await CardPileCmd.Add(enumerable.First(), PileType.Hand, CardPilePosition.Bottom, null, false);
 			}
 		}
 	}

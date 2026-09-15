@@ -23,23 +23,28 @@ public class CatchSnowball : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[3]
 	{
-		(DynamicVar)new BlockVar(8m, (ValueProp)8),
+		(DynamicVar)new BlockVar(8m, ValueProp.Move),
 		(DynamicVar)new IntVar("Turns", 2m),
-		(DynamicVar)new BlockVar("NextBlock", 7m, (ValueProp)8)
+		(DynamicVar)new BlockVar("NextBlock", 7m, ValueProp.Move)
 	});
 
 	public CatchSnowball()
-		: base(2, (CardType)2, (CardRarity)2, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(2, CardType.Skill, CardRarity.Common, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		await CreatureCmd.TriggerAnim(this.Owner.Creature, "Cast", this.Owner.Character.CastAnimDelay);
 		await CreatureCmd.GainBlock(this.Owner.Creature, this.DynamicVars.Block, cardPlay, false);
 		BlockVar val = (BlockVar)this.DynamicVars["NextBlock"];
-		IEnumerable<AbstractModel> enumerable = default(IEnumerable<AbstractModel>);
-		decimal nextBlockAmount = Hook.ModifyBlock(this.CombatState, this.Owner.Creature, ((DynamicVar)val).BaseValue, val.Props, (CardModel)this, cardPlay, out enumerable);
+		IEnumerable<AbstractModel>? enumerable;
+		decimal nextBlockAmount = Hook.ModifyBlock(combatState, this.Owner.Creature, ((DynamicVar)val).BaseValue, val.Props, this, cardPlay, out enumerable);
 		int num = (int)this.DynamicVars["Turns"].BaseValue;
 		(await PowerCmd.Apply<CatchSnowballPower>(choiceContext, this.Owner.Creature, (decimal)num, this.Owner.Creature, (CardModel)this, false))?.SetBlock(nextBlockAmount);
 	}

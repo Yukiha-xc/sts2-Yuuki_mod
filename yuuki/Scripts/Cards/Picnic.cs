@@ -24,21 +24,26 @@ public class Picnic : YukiCardModel
 
 	public override int CapacityOverload => 1;
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(15m, (ValueProp)8)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(15m, ValueProp.Move)];
 
 	public Picnic()
-		: base(1, (CardType)1, (CardRarity)4, (TargetType)3, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		List<Creature> list = this.CombatState.HittableEnemies.ToList();
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
+		List<Creature> list = combatState.HittableEnemies.ToList();
 		if (list.All((Creature e) => e.HasPower<EmpathyPower>()) && list.Count > 0)
 		{
 			int count = list.Count;
-			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).WithHitCount(count)
-				.TargetingAllOpponents(this.CombatState)
+			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).WithHitCount(count)
+				.TargetingAllOpponents(combatState)
 				.Execute(choiceContext);
 		}
 		else
@@ -47,7 +52,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new Dam
 			{
 				await PowerCmd.Apply<EmpathyPower>(choiceContext, item, 1m, this.Owner.Creature, (CardModel)this, false);
 			}
-			await CardPileCmd.AddGeneratedCardToCombat(this.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), (PileType)3, (Player)null, (CardPilePosition)1);
+			await CardPileCmd.AddGeneratedCardToCombat(combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), PileType.Discard, null, CardPilePosition.Bottom);
 		}
 		await Cmd.Wait(0.25f, false);
 	}

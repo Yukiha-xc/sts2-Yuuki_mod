@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -23,11 +24,11 @@ public class EmpathyPower : CustomPowerModel
 
 	public override string CustomBigIconPath => "res://yuuki/images/powers/EmpathyPower.png";
 
-	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
 	{
 		if (target == this.Owner)
 		{
-			int num = this.CombatState.Enemies.Count((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
+			int num = this.CombatState?.Enemies.Count((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>()) ?? 0;
 			return 1.0m + 0.25m * (decimal)num;
 		}
 		return 1m;
@@ -39,7 +40,7 @@ public class EmpathyPower : CustomPowerModel
 		{
 			return;
 		}
-		Creature creature2 = this.CombatState.PlayerCreatures.FirstOrDefault();
+		Creature? creature2 = this.CombatState?.PlayerCreatures.FirstOrDefault();
 		if (creature2 != null)
 		{
 			decimal num = 0.25m;
@@ -61,7 +62,7 @@ public class EmpathyPower : CustomPowerModel
 	public override async Task AfterRemoved(Creature owner)
 	{
 		await base.AfterRemoved(owner);
-		YukiCrystalSystem.AddCrystals();
+		await YukiCrystalSystem.AddCrystals();
 		await TriggerEmpathyInMemoryDamage(owner);
 	}
 
@@ -71,15 +72,19 @@ public class EmpathyPower : CustomPowerModel
 		{
 			return;
 		}
-		Creature creature = this.CombatState.PlayerCreatures.FirstOrDefault();
+		Creature? creature = this.CombatState?.PlayerCreatures.FirstOrDefault();
 		if (creature != null && creature.HasPower<EmpathyInMemoryPower>())
 		{
-			EmpathyInMemoryPower power = creature.GetPower<EmpathyInMemoryPower>();
-			decimal amount = ((PowerModel)(object)power).DynamicVars.Damage.BaseValue * (decimal)((PowerModel)(object)power).Amount;
+			EmpathyInMemoryPower? power = creature.GetPower<EmpathyInMemoryPower>();
+			if (power is null)
+			{
+				return;
+			}
+			decimal amount = power.DynamicVars.Damage.BaseValue * power.Amount;
 			if (target.IsAlive)
 			{
 				this.Flash();
-				await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, amount, ValueProp.Move, creature, null);
+				await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, amount, ValueProp.Move, creature, null, null);
 			}
 		}
 	}

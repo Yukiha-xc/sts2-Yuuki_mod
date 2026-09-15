@@ -21,7 +21,7 @@ public class SnowWalk : YukiCardModel
 	protected override IEnumerable<DynamicVar> CanonicalVars => Array.Empty<DynamicVar>();
 
 	public SnowWalk()
-		: base(2, (CardType)3, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

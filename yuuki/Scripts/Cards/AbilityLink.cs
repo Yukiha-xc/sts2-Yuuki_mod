@@ -14,25 +14,30 @@ namespace yuuki.Scripts.Cards;
 public class AbilityLink : YukiCardModel
 {
 	public AbilityLink()
-		: base(3, (CardType)2, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(3, CardType.Skill, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		this.ExhaustOnNextPlay = true;
 		decimal num = default(decimal);
 		decimal totalDex = default(decimal);
-		foreach (Creature enemy in this.CombatState.Enemies)
+		foreach (Creature enemy in combatState.Enemies)
 		{
 			if (enemy.IsAlive && enemy.HasPower<EmpathyPower>())
 			{
-				StrengthPower power = enemy.GetPower<StrengthPower>();
+				StrengthPower? power = enemy.GetPower<StrengthPower>();
 				if (power != null)
 				{
 					num += (decimal)((PowerModel)power).Amount;
 				}
-				DexterityPower power2 = enemy.GetPower<DexterityPower>();
+				DexterityPower? power2 = enemy.GetPower<DexterityPower>();
 				if (power2 != null)
 				{
 					totalDex += (decimal)((PowerModel)power2).Amount;

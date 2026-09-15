@@ -21,7 +21,7 @@ public class ActiveBody : YukiCardModel
 	});
 
 	public ActiveBody()
-		: base(1, (CardType)2, (CardRarity)2, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Common, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

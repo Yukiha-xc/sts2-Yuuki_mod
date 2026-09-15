@@ -17,23 +17,23 @@ public class HomingSnowball : YukiCardModel
 {
 	public override bool UsesSnowCrystals => true;
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8m, (ValueProp)8), new DynamicVar("Vulnerable", 1m)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8m, ValueProp.Move), new DynamicVar("Vulnerable", 1m)];
 
 	public HomingSnowball()
-		: base(1, (CardType)1, (CardRarity)2, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		Creature target = cardPlay.Target;
+		Creature? target = cardPlay.Target;
 		if (target != null)
 		{
 			if (YukiCrystalSystem.CurrentCrystals > 4)
 			{
 				await PowerCmd.Apply<VulnerablePower>(choiceContext, target, this.DynamicVars["Vulnerable"].BaseValue, this.Owner.Creature, (CardModel)this, false);
 			}
-			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(target)
+			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(target)
 				.Execute(choiceContext);
 		}
 	}

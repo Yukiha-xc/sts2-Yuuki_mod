@@ -15,26 +15,31 @@ public class Strike : YukiCardModel
 {
 	private const int energyCost = 1;
 
-	private const CardType type = (CardType)1;
+	private const CardType type = CardType.Attack;
 
-	private const CardRarity rarity = (CardRarity)1;
+	private const CardRarity rarity = CardRarity.Basic;
 
-	private const TargetType targetType = (TargetType)2;
+	private const TargetType targetType = TargetType.AnyEnemy;
 
 	private const bool shouldShowInCardLibrary = true;
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(6m, (ValueProp)8)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(6m, ValueProp.Move)];
 
-	protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { (CardTag)1 };
+	protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
 
 	public Strike()
-		: base(1, (CardType)1, (CardRarity)1, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(cardPlay.Target)
+		if (cardPlay.Target is not { } target)
+		{
+			return;
+		}
+
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(target)
 			.Execute(choiceContext);
 	}
 

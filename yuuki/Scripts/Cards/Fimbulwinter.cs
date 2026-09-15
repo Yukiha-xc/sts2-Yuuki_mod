@@ -20,7 +20,7 @@ public class Fimbulwinter : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Threshold", 4m)];
 
 	public Fimbulwinter()
-		: base(1, (CardType)3, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

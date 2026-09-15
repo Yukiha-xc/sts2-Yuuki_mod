@@ -20,24 +20,29 @@ public class SnowResonance : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new DamageVar(9m, (ValueProp)8),
+		(DynamicVar)new DamageVar(9m, ValueProp.Move),
 		new YukiCrystalVar(1m)
 	});
 
 	public SnowResonance()
-		: base(1, (CardType)1, (CardRarity)2, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (cardPlay.Target is not { } target)
+		{
+			return;
+		}
+
 		await CreatureCmd.TriggerAnim(this.Owner.Creature, "Attack", this.Owner.Character.AttackAnimDelay);
-		bool targetHadEmpathy = cardPlay.Target != null && cardPlay.Target.HasPower<EmpathyPower>();
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(cardPlay.Target)
+		bool targetHadEmpathy = target.HasPower<EmpathyPower>();
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(target)
 			.Execute(choiceContext);
 		if (targetHadEmpathy)
 		{
-			YukiCrystalSystem.AddCrystals((int)this.DynamicVars["YukiCrystal"].BaseValue);
+			await YukiCrystalSystem.AddCrystals((int)this.DynamicVars["YukiCrystal"].BaseValue);
 		}
 		await Cmd.Wait(0.25f, false);
 	}

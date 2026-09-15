@@ -19,11 +19,11 @@ public sealed class PsychicGuardianPower : CustomPowerModel
 
 	public override async Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
 	{
-		if (card.Owner.Creature == this.Owner && (card.GetType().Name.Contains("Void") || card.Id.Entry == "Void"))
+		if (this.Owner.Player is { } owner && card.Owner.Creature == this.Owner && (card.GetType().Name.Contains("Void") || card.Id.Entry == "Void"))
 		{
 			this.Flash();
-			await PlayerCmd.GainEnergy(this.Amount, this.Owner.Player);
-			await CardPileCmd.Draw(choiceContext, this.Amount, this.Owner.Player);
+			await PlayerCmd.GainEnergy(this.Amount, owner);
+			await CardPileCmd.Draw(choiceContext, this.Amount, owner);
 		}
 	}
 }

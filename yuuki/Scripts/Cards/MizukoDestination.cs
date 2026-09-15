@@ -22,7 +22,7 @@ public class MizukoDestination : YukiCardModel
 	public class MizukoBlockVar : BlockVar
 	{
 		public MizukoBlockVar()
-			: base(0m, (ValueProp)8)
+			: base(0m, ValueProp.Move)
 		{
 		}
 
@@ -60,7 +60,7 @@ public class MizukoDestination : YukiCardModel
 
 	public override bool GainsBlock => true;
 
-public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)1];
+public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
@@ -69,14 +69,19 @@ public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)1];
 	});
 
 	public MizukoDestination()
-		: base(1, (CardType)2, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		int num = 0;
-		foreach (Creature enemy in this.CombatState.Enemies)
+		foreach (Creature enemy in combatState.Enemies)
 		{
 			if (enemy == null || enemy.IsDead || enemy.Monster == null || enemy.Monster.NextMove == null)
 			{
@@ -84,12 +89,12 @@ public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)1];
 			}
 			foreach (AttackIntent item in enemy.Monster.NextMove.Intents.OfType<AttackIntent>())
 			{
-				num += item.GetTotalDamage(this.CombatState.PlayerCreatures.Cast<Creature>(), enemy);
+				num += item.GetTotalDamage(combatState.PlayerCreatures.Cast<Creature>(), enemy);
 			}
 		}
 		decimal baseValue = (decimal)num;
 		((DynamicVar)this.DynamicVars.Block).BaseValue = baseValue;
-		await CreatureCmd.GainBlock(this.Owner.Creature, ((DynamicVar)this.DynamicVars.Block).BaseValue, (ValueProp)8, cardPlay, false);
+		await CreatureCmd.GainBlock(this.Owner.Creature, ((DynamicVar)this.DynamicVars.Block).BaseValue, ValueProp.Move, cardPlay, false);
 		decimal baseValue2 = this.DynamicVars["Power"].BaseValue;
 		await PowerCmd.Apply<BlurPower>(choiceContext, this.Owner.Creature, baseValue2, this.Owner.Creature, (CardModel)this, false);
 		await Cmd.Wait(0.25f, false);

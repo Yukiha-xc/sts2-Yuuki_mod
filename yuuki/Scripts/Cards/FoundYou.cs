@@ -21,7 +21,7 @@ public class FoundYou : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Discard", 2m)];
 
 	public FoundYou()
-		: base(1, (CardType)2, (CardRarity)2, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -29,7 +29,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Dis
 	{
 		await CardPileCmd.Draw(choiceContext, 2m, this.Owner, false);
 		int num = (int)this.DynamicVars["Discard"].BaseValue;
-		List<CardModel> selectedCards = (await CardSelectCmd.FromHandForDiscard(choiceContext, this.Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, num), (Func<CardModel, bool>)null, (AbstractModel)this)).ToList();
+		List<CardModel> selectedCards = (await CardSelectCmd.FromHandForDiscard(choiceContext, this.Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, num), null, this)).ToList();
 		if (selectedCards.Count > 0)
 		{
 			await CardCmd.Discard(choiceContext, (IEnumerable<CardModel>)selectedCards);

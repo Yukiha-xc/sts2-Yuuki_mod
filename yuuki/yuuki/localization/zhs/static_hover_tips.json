@@ -1,4 +1,6 @@
 {
+    "YUUKI_ENERGY.title": "能量",
+    "YUUKI_ENERGY.description": "用于打出卡牌。每回合开始时会恢复。",
     "YUUKI_CAPACITY_OVERLOAD.title": "能力过载",
     "YUUKI_CAPACITY_OVERLOAD.description": "在你的弃牌堆放入等同于能力过载数值的 [blue]虚空[/blue] 。",
     "YUUKI_SNOW_CRYSTAL.title": "雪晶",

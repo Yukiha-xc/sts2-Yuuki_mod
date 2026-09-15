@@ -21,10 +21,10 @@ public class ResonanceImpact : YukiCardModel
 
 	public override string PortraitPath => "res://yuuki/images/cards/BG081_125.png";
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(13m, (ValueProp)8)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(13m, ValueProp.Move)];
 
 	public ResonanceImpact()
-		: base(1, (CardType)1, (CardRarity)3, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -33,14 +33,14 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new Dam
 		if (cardPlay.Target != null)
 		{
 			bool targetHadEmpathy = cardPlay.Target.HasPower<EmpathyPower>();
-			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(cardPlay.Target)
+			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target)
 				.Execute(choiceContext);
 			if (targetHadEmpathy)
 			{
 				await PowerCmd.Remove<EmpathyPower>(cardPlay.Target);
 				CardModel obj = this.CreateClone();
 				obj.EnergyCost.SetThisCombat(0, false);
-				await CardPileCmd.AddGeneratedCardToCombat(obj, (PileType)3, (Player)null, (CardPilePosition)1);
+				await CardPileCmd.AddGeneratedCardToCombat(obj, PileType.Discard, null, CardPilePosition.Bottom);
 			}
 		}
 	}

@@ -23,15 +23,20 @@ public class WhiteOath : YukiCardModel
 	});
 
 	public WhiteOath()
-		: base(1, (CardType)1, (CardRarity)5, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Ancient, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		YukiCrystalSystem.AddCrystals(2);
-		((DynamicVar)this.DynamicVars.Damage).UpdateCardPreview((CardModel)this, (CardPreviewMode)1, cardPlay.Target, true);
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(cardPlay.Target)
+		if (cardPlay.Target is not { } target)
+		{
+			return;
+		}
+
+		await YukiCrystalSystem.AddCrystals(2);
+		((DynamicVar)this.DynamicVars.Damage).UpdateCardPreview(this, CardPreviewMode.Normal, target, true);
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(target)
 			.Execute(choiceContext);
 	}
 

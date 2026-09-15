@@ -12,7 +12,7 @@ namespace yuuki.Scripts.Cards;
 public class WhiteEternity : YukiCardModel
 {
 	public WhiteEternity()
-		: base(1, (CardType)2, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

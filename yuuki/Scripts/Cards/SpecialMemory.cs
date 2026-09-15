@@ -14,8 +14,8 @@ public class SpecialMemory : YukiCardModel
 {
 	public override IEnumerable<CardKeyword> CanonicalKeywords => new _003C_003Ez__ReadOnlyArray<CardKeyword>((CardKeyword[])(object)new CardKeyword[2]
 	{
-		(CardKeyword)5,
-		(CardKeyword)1
+		CardKeyword.Retain,
+		CardKeyword.Exhaust
 	});
 
 	public override string PortraitPath => "res://yuuki/images/cards/memory.png";
@@ -23,7 +23,7 @@ public class SpecialMemory : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new IntVar("Draw", 4m)];
 
 	public SpecialMemory()
-		: base(0, (CardType)2, (CardRarity)7, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Token, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

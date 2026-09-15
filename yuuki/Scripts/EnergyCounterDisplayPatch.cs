@@ -1,11 +1,7 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using Godot;
 using HarmonyLib;
-using MegaCrit.Sts2.Core.Combat;
-using MegaCrit.Sts2.Core.Context;
-using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Logging;
@@ -18,76 +14,63 @@ namespace yuuki.Scripts;
 [HarmonyPatch(typeof(NEnergyCounter), "_Process")]
 public static class EnergyCounterDisplayPatch
 {
-	private static int _lastCrystals = -1;
-
-	private static float _pulseTimer = 0f;
-
-	private static float _juiceScale = 0f;
-
-	public static void Postfix(Node __instance, double delta)
+	private sealed class CounterState
 	{
-		try
+		public CounterState(TextureRect crystalBackground, Label crystalLabel)
 		{
-			Control val = (Control)(object)((__instance is Control) ? __instance : null);
-			if (val == null)
+			CrystalBackground = crystalBackground;
+			CrystalLabel = crystalLabel;
+		}
+
+		public TextureRect CrystalBackground { get; }
+		public Label CrystalLabel { get; }
+		public int LastCrystals { get; set; } = -1;
+		public float PulseTimer { get; set; }
+		public float JuiceScale { get; set; }
+	}
+
+	private static readonly ConditionalWeakTable<NEnergyCounter, CounterState> States = new();
+
+	public static void Postfix(NEnergyCounter __instance, double delta)
+	{
+		if (!States.TryGetValue(__instance, out CounterState? state))
+		{
+			Label? crystalLabel = __instance.GetNodeOrNull<Label>("%SnowCrystalLabel");
+			TextureRect? crystalBackground = __instance.GetNodeOrNull<TextureRect>("%SnowCrystalBg");
+			if (crystalLabel is null || crystalBackground is null)
 			{
 				return;
 			}
-			if (!((GodotObject)val).HasMeta("yuuki_signals_connected"))
-			{
-				ConnectSignals(val);
-				((GodotObject)val).SetMeta("yuuki_signals_connected", Variant.From(true));
-			}
-			_pulseTimer += (float)delta;
-			Label nodeOrNull = ((Node)val).GetNodeOrNull<Label>("Label");
-			if (nodeOrNull != null)
-			{
-				CombatState combatState = CombatManager.Instance.DebugOnlyGetState();
-				bool flag = false;
-				if (combatState != null)
-				{
-					flag = combatState.Players.FirstOrDefault((Player p) => LocalContext.IsMe(p))?.Character is YukiCharacter;
-				}
-				if (flag)
-				{
-					((Control)nodeOrNull).AddThemeColorOverride("font_color", Colors.Black);
-				}
-				else
-				{
-					((Control)nodeOrNull).RemoveThemeColorOverride("font_color");
-				}
-			}
-			float num = 1f + 0.015f * Mathf.Sin(_pulseTimer * (float)Math.PI * 0.5f);
-			val.Scale = new Vector2(num, num);
-			val.PivotOffset = new Vector2(60f, 60f);
-			TextureRect nodeOrNull2 = ((Node)val).GetNodeOrNull<TextureRect>("%SnowCrystalBg");
-			Label nodeOrNull3 = ((Node)val).GetNodeOrNull<Label>("%SnowCrystalLabel");
-			if (nodeOrNull3 != null)
-			{
-				nodeOrNull3.Text = YukiCrystalSystem.CurrentCrystals.ToString();
-			}
-			if (nodeOrNull2 != null)
-			{
-				if (_lastCrystals != -1 && _lastCrystals != YukiCrystalSystem.CurrentCrystals)
-				{
-					_juiceScale = 0.4f;
-				}
-				_lastCrystals = YukiCrystalSystem.CurrentCrystals;
-				if (_juiceScale > 0.001f)
-				{
-					_juiceScale = Mathf.Lerp(_juiceScale, 0f, (float)delta * 8f);
-					float num2 = 1f + _juiceScale;
-					((Control)nodeOrNull2).Scale = new Vector2(num2, num2);
-					((Control)nodeOrNull2).PivotOffset = ((Control)nodeOrNull2).Size / 2f;
-				}
-				else
-				{
-					((Control)nodeOrNull2).Scale = Vector2.One;
-				}
-			}
+
+			__instance.GetNodeOrNull<Label>("Label")?.AddThemeColorOverride("font_color", Colors.Black);
+			ConnectSignals(__instance);
+			state = new CounterState(crystalBackground, crystalLabel);
+			States.Add(__instance, state);
 		}
-		catch (Exception)
+
+		state.PulseTimer += (float)delta;
+		float pulseScale = 1f + 0.015f * Mathf.Sin(state.PulseTimer * Mathf.Pi * 0.5f);
+		__instance.Scale = new Vector2(pulseScale, pulseScale);
+		__instance.PivotOffset = new Vector2(60f, 60f);
+
+		int crystals = YukiCrystalSystem.CurrentCrystals;
+		state.CrystalLabel.Text = crystals.ToString();
+		if (state.LastCrystals >= 0 && state.LastCrystals != crystals)
 		{
+			state.JuiceScale = 0.4f;
+		}
+		state.LastCrystals = crystals;
+
+		if (state.JuiceScale > 0.001f)
+		{
+			state.JuiceScale = Mathf.Lerp(state.JuiceScale, 0f, (float)delta * 8f);
+			float crystalScale = 1f + state.JuiceScale;
+			state.CrystalBackground.Scale = new Vector2(crystalScale, crystalScale);
+			state.CrystalBackground.PivotOffset = state.CrystalBackground.Size / 2f;
+		}
+		else
+		{
+			state.CrystalBackground.Scale = Vector2.One;
 		}
 	}
 
@@ -97,15 +80,21 @@ public static class EnergyCounterDisplayPatch
 		{
 			ShowTip(root, "YUUKI_ENERGY", includeEmpathy: false);
 		};
-		root.MouseExited += HideTip;
-		Control crystalBg = ((Node)root).GetNodeOrNull<Control>("%SnowCrystalBg");
-		if (crystalBg != null)
+		root.MouseExited += delegate
+		{
+			HideTip(root);
+		};
+		Control? crystalBg = root.GetNodeOrNull<Control>("%SnowCrystalBg");
+		if (crystalBg is not null)
 		{
 			crystalBg.MouseEntered += delegate
 			{
 				ShowTip(crystalBg, "YUUKI_SNOW_CRYSTAL", includeEmpathy: true);
 			};
-			crystalBg.MouseExited += HideTip;
+			crystalBg.MouseExited += delegate
+			{
+				HideTip(crystalBg);
+			};
 		}
 	}
 
@@ -113,24 +102,26 @@ public static class EnergyCounterDisplayPatch
 	{
 		try
 		{
-			LocString title = new LocString("static_hover_tips", key + ".title");
-			LocString description = new LocString("static_hover_tips", key + ".description");
-			HoverTip hoverTip = new HoverTip(title, description);
-			List<IHoverTip> list = new List<IHoverTip> { hoverTip };
+			// A child control can become hovered while the counter itself is still
+			// hovered. Clear any existing set before registering the new target.
+			NHoverTipSet.Remove(target);
+			LocString title = new("static_hover_tips", key + ".title");
+			LocString description = new("static_hover_tips", key + ".description");
+			List<IHoverTip> tips = [new HoverTip(title, description)];
 			if (includeEmpathy)
 			{
-				list.Add(HoverTipFactory.FromPower<EmpathyPower>());
+				tips.Add(HoverTipFactory.FromPower<EmpathyPower>());
 			}
-			NHoverTipSet.CreateAndShow(target, list);
+			NHoverTipSet.CreateAndShow(target, tips);
 		}
-		catch (Exception ex)
+		catch (System.Exception ex)
 		{
-			Log.Error("Failed to show hover tip: " + ex.Message);
+			Log.Error("Failed to show Yuki hover tip: " + ex.Message);
 		}
 	}
 
-	private static void HideTip()
+	private static void HideTip(Control target)
 	{
-		NHoverTipSet.Clear();
+		NHoverTipSet.Remove(target);
 	}
 }

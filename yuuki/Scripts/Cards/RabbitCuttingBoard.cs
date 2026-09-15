@@ -18,12 +18,12 @@ public class RabbitCuttingBoard : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new BlockVar(7m, (ValueProp)8),
+		(DynamicVar)new BlockVar(7m, ValueProp.Move),
 		(DynamicVar)new IntVar("Decrease", 2m)
 	});
 
 	public RabbitCuttingBoard()
-		: base(0, (CardType)2, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

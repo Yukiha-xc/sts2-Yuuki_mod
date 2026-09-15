@@ -24,14 +24,14 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new Yuk
 	protected override IEnumerable<IHoverTip> ExtraHoverTips => base.ExtraHoverTips.Concat((IEnumerable<IHoverTip>)(object)new IHoverTip[1] { HoverTipFactory.FromPower<GatherSnowballPower>((int?)null) });
 
 	public GatherSnowball()
-		: base(1, (CardType)2, (CardRarity)2, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Common, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
 		await CreatureCmd.TriggerAnim(this.Owner.Creature, "Cast", this.Owner.Character.CastAnimDelay);
-		YukiCrystalSystem.AddCrystals((int)this.DynamicVars["YukiCrystal"].BaseValue);
+		await YukiCrystalSystem.AddCrystals((int)this.DynamicVars["YukiCrystal"].BaseValue);
 		await PowerCmd.Apply<GatherSnowballPower>(choiceContext, this.Owner.Creature, 2m, this.Owner.Creature, (CardModel)this, false);
 	}
 

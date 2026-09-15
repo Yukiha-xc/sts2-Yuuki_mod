@@ -14,7 +14,7 @@ public class NoMoreGoodbyes : YukiCardModel
 	public override string PortraitPath => "res://yuuki/images/cards/YUKI_e10b2.png";
 
 	public NoMoreGoodbyes()
-		: base(2, (CardType)2, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(2, CardType.Skill, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

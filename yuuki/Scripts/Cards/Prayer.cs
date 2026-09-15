@@ -21,7 +21,7 @@ public class Prayer : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new DamageVar(3m, (ValueProp)8),
+		(DynamicVar)new DamageVar(3m, ValueProp.Move),
 		new DynamicVar("Hits", 2m)
 	});
 
@@ -38,16 +38,21 @@ public class Prayer : YukiCardModel
 	}
 
 	public Prayer()
-		: base(1, (CardType)1, (CardRarity)3, (TargetType)3, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		int hits = (int)this.DynamicVars["Hits"].BaseValue;
 		for (int i = 0; i < hits; i++)
 		{
-			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).TargetingAllOpponents(this.CombatState)
+			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(combatState)
 				.Execute(choiceContext);
 		}
 		await PowerCmd.Apply<PrayerPower>(choiceContext, this.Owner.Creature, 1m, this.Owner.Creature, (CardModel)this, false);

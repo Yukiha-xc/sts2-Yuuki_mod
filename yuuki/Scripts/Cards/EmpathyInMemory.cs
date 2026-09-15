@@ -18,10 +18,10 @@ public class EmpathyInMemory : YukiCardModel
 
 	public override string PortraitPath => "res://yuuki/images/cards/YUKI_e01a2.png";
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(8m, (ValueProp)8)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(8m, ValueProp.Move)];
 
 	public EmpathyInMemory()
-		: base(2, (CardType)3, (CardRarity)3, (TargetType)0, shouldShowInCardLibrary: true)
+		: base(2, CardType.Power, CardRarity.Uncommon, TargetType.None, shouldShowInCardLibrary: true)
 	{
 	}
 

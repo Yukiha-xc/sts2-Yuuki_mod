@@ -13,10 +13,10 @@ public class EmpathyOfFamily : YukiCardModel
 {
 	public override bool UsesEmpathy => true;
 
-	public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)2];
+	public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Ethereal];
 
 	public EmpathyOfFamily()
-		: base(1, (CardType)2, (CardRarity)3, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 

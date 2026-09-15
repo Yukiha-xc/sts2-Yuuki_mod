@@ -24,15 +24,20 @@ public class RegainHeart : YukiCardModel
 	});
 
 	public RegainHeart()
-		: base(1, (CardType)2, (CardRarity)3, (TargetType)0, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Uncommon, TargetType.None, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		int num = (int)this.DynamicVars["DrawCount"].BaseValue;
 		await CardPileCmd.Draw(choiceContext, (decimal)num, this.Owner, false);
-		Creature val = this.CombatState.Enemies.FirstOrDefault((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
+		Creature? val = combatState.Enemies.FirstOrDefault((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
 		if (val != null)
 		{
 			await PowerCmd.Remove<EmpathyPower>(val);

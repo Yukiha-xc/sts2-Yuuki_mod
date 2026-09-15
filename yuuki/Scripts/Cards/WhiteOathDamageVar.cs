@@ -9,7 +9,7 @@ namespace yuuki.Scripts.Cards;
 public class WhiteOathDamageVar : DamageVar
 {
 	public WhiteOathDamageVar()
-		: base(0m, (ValueProp)8)
+		: base(0m, ValueProp.Move)
 	{
 	}
 

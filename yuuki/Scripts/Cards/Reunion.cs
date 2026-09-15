@@ -22,14 +22,19 @@ public class Reunion : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new EnergyVar(1)];
 
 	public Reunion()
-		: base(0, (CardType)2, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		await PlayerCmd.GainEnergy(1m, this.Owner);
-		List<Creature> list = this.CombatState.Enemies.Where((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>()).ToList();
+		List<Creature> list = combatState.Enemies.Where((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>()).ToList();
 		if (list.Count > 0)
 		{
 			foreach (Creature item in list)

@@ -24,13 +24,12 @@ public class FimbulwinterPower : CustomPowerModel
 		if (player == this.Owner.Player)
 		{
 			this.Flash();
-			YukiCrystalSystem.AddCrystals();
+			await YukiCrystalSystem.AddCrystals();
 			int amount = this.Amount;
 			if (YukiCrystalSystem.CurrentCrystals <= amount)
 			{
-				YukiCrystalSystem.AddCrystals();
+				await YukiCrystalSystem.AddCrystals();
 			}
 		}
-		await Task.CompletedTask;
 	}
 }

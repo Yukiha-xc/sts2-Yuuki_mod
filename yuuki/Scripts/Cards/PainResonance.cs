@@ -24,7 +24,7 @@ public class PainResonance : YukiCardModel
 	{
 		get
 		{
-			ICombatState combatState = this.CombatState;
+			ICombatState? combatState = this.CombatState;
 			if (combatState == null)
 			{
 				return false;
@@ -35,18 +35,23 @@ public class PainResonance : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new DamageVar(8m, (ValueProp)8),
+		(DynamicVar)new DamageVar(8m, ValueProp.Move),
 		(DynamicVar)new IntVar("WeakAmount", 1m)
 	});
 
 	public PainResonance()
-		: base(1, (CardType)2, (CardRarity)3, (TargetType)3, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		List<Creature> empathyEnemies = this.CombatState.Enemies.Where((Creature e) => e != null && e.IsAlive && e.HasPower<EmpathyPower>()).ToList();
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
+		List<Creature> empathyEnemies = combatState.Enemies.Where((Creature e) => e != null && e.IsAlive && e.HasPower<EmpathyPower>()).ToList();
 		if (empathyEnemies.Count <= 0)
 		{
 			await Cmd.Wait(0.1f, false);
@@ -60,7 +65,7 @@ public class PainResonance : YukiCardModel
 				if (enemy.IsAlive)
 				{
 					await PowerCmd.Apply<WeakPower>(choiceContext, enemy, this.DynamicVars["WeakAmount"].BaseValue, this.Owner.Creature, (CardModel)this, false);
-					await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).WithHitCount(2).FromCard((CardModel)this)
+					await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).WithHitCount(2).FromCard(this, cardPlay)
 						.Targeting(enemy)
 						.Execute(choiceContext);
 				}

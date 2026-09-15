@@ -23,14 +23,19 @@ public class Partner : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new CardsVar(1)];
 
 	public Partner()
-		: base(1, (CardType)2, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		await CardPileCmd.Draw(choiceContext, ((DynamicVar)this.DynamicVars.Cards).BaseValue, this.Owner, false);
-		int num = this.CombatState.Enemies.Count((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
+		int num = combatState.Enemies.Count((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
 		if (num > 0)
 		{
 			await PowerCmd.Apply<StrengthPower>(choiceContext, this.Owner.Creature, (decimal)num, this.Owner.Creature, (CardModel)this, false);

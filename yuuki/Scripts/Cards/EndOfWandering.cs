@@ -20,25 +20,30 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Cap
 
 	public override IEnumerable<CardKeyword> CanonicalKeywords => new _003C_003Ez__ReadOnlyArray<CardKeyword>((CardKeyword[])(object)new CardKeyword[2]
 	{
-		(CardKeyword)1,
-		(CardKeyword)5
+		CardKeyword.Exhaust,
+		CardKeyword.Retain
 	});
 
 	public EndOfWandering()
-		: base(0, (CardType)2, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		foreach (CardModel card in PileTypeExtensions.GetPile((PileType)2, this.Owner).Cards)
+		if (this.CombatState is not { } combatState)
 		{
-			card.AddKeyword((CardKeyword)5);
+			return;
+		}
+
+		foreach (CardModel card in PileTypeExtensions.GetPile(PileType.Hand, this.Owner).Cards)
+		{
+			card.AddKeyword(CardKeyword.Retain);
 		}
 		int overloadCount = CapacityOverload;
 		for (int i = 0; i < overloadCount; i++)
 		{
-			await CardPileCmd.AddGeneratedCardToCombat(this.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), (PileType)3, (Player)null, (CardPilePosition)1);
+			await CardPileCmd.AddGeneratedCardToCombat(combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), PileType.Discard, null, CardPilePosition.Bottom);
 		}
 		await Cmd.Wait(0.25f, false);
 	}

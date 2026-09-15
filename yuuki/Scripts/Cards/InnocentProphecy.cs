@@ -22,28 +22,34 @@ public class InnocentProphecy : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("CapacityOverload", 2m)];
 
 	public InnocentProphecy()
-		: base(1, (CardType)2, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
 		await CardPileCmd.ShuffleIfNecessary(choiceContext, this.Owner);
-		IReadOnlyList<CardModel> cards = PileTypeExtensions.GetPile((PileType)1, this.Owner).Cards;
+		IReadOnlyList<CardModel> cards = PileTypeExtensions.GetPile(PileType.Draw, this.Owner).Cards;
 		if (cards.Any())
 		{
 			CardSelectorPrefs val = new CardSelectorPrefs(this.SelectionScreenPrompt, 1);
-			IEnumerable<CardModel> source = await CardSelectCmd.FromSimpleGrid(choiceContext, (IReadOnlyList<CardModel>)cards.ToList(), this.Owner, val);
-			if (source.Any())
+			IEnumerable<CardModel> source = await CardSelectCmd.FromSimpleGrid(choiceContext, cards.ToList(), this.Owner, val);
+			CardModel? selected = source.FirstOrDefault();
+			if (selected is not null)
 			{
-				await CardPileCmd.Add(source.First(), (PileType)2, (CardPilePosition)1, (AbstractModel)null, false);
+				await CardPileCmd.Add(selected, PileType.Hand, CardPilePosition.Bottom, null, false);
 			}
 		}
 		await PowerCmd.Apply<InnocentProphecyPower>(choiceContext, this.Owner.Creature, 1m, this.Owner.Creature, (CardModel)this, false);
 		int overloadCount = CapacityOverload;
 		for (int i = 0; i < overloadCount; i++)
 		{
-			await CardPileCmd.AddGeneratedCardToCombat(this.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), (PileType)3, (Player)null, (CardPilePosition)1);
+			await CardPileCmd.AddGeneratedCardToCombat(combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), PileType.Discard, null, CardPilePosition.Bottom);
 		}
 		await Cmd.Wait(0.25f, false);
 	}

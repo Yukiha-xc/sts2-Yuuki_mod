@@ -9,7 +9,7 @@ namespace yuuki.Scripts.Cards;
 public class BlizzardBallDamageVar : DamageVar
 {
 	public BlizzardBallDamageVar(decimal baseVal)
-		: base(baseVal, (ValueProp)8)
+		: base(baseVal, ValueProp.Move)
 	{
 	}
 

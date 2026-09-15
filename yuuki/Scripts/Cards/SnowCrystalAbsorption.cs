@@ -21,7 +21,7 @@ public class SnowCrystalAbsorption : YukiCardModel
 	});
 
 	public SnowCrystalAbsorption()
-		: base(0, (CardType)2, (CardRarity)2, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Common, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -30,7 +30,7 @@ public class SnowCrystalAbsorption : YukiCardModel
 		int num = (int)this.DynamicVars["YukiConsume"].BaseValue;
 		if (YukiCrystalSystem.CurrentCrystals >= num)
 		{
-			YukiCrystalSystem.AddCrystals(-num);
+			await YukiCrystalSystem.AddCrystals(-num);
 			await PlayerCmd.GainEnergy((decimal)(int)this.DynamicVars["EnergyGain"].BaseValue, this.Owner);
 		}
 	}

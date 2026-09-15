@@ -19,33 +19,38 @@ public class SeveranceOfConfusion : YukiCardModel
 {
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new DamageVar(15m, (ValueProp)8),
+		(DynamicVar)new DamageVar(15m, ValueProp.Move),
 		new DynamicVar("Power", 1m)
 	});
 
 	public override int CapacityOverload => 1;
 
 	public SeveranceOfConfusion()
-		: base(2, (CardType)1, (CardRarity)3, (TargetType)3, shouldShowInCardLibrary: true)
+		: base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		foreach (Creature enemy in this.CombatState.Enemies)
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
+		foreach (Creature enemy in combatState.Enemies)
 		{
 			if (enemy.IsAlive)
 			{
 				if (enemy.Block > 0)
 				{
-					await CreatureCmd.LoseBlock(enemy, (decimal)enemy.Block);
+					await CreatureCmd.LoseBlock(choiceContext, enemy, enemy.Block, this.Owner.Creature);
 				}
 				await PowerCmd.Apply<VulnerablePower>(choiceContext, enemy, this.DynamicVars["Power"].BaseValue, this.Owner.Creature, (CardModel)this, false);
 			}
 		}
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).TargetingAllOpponents(this.CombatState)
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(combatState)
 			.Execute(choiceContext);
-		await CardPileCmd.AddGeneratedCardToCombat(this.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), (PileType)3, (Player)null, (CardPilePosition)1);
+		await CardPileCmd.AddGeneratedCardToCombat(combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), PileType.Discard, null, CardPilePosition.Bottom);
 		await Cmd.Wait(0.25f, false);
 	}
 

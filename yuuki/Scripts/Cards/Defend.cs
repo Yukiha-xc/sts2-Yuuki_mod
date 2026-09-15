@@ -15,28 +15,28 @@ public class Defend : YukiCardModel
 {
 	private const int energyCost = 1;
 
-	private const CardType type = (CardType)2;
+	private const CardType type = CardType.Skill;
 
-	private const CardRarity rarity = (CardRarity)1;
+	private const CardRarity rarity = CardRarity.Basic;
 
-	private const TargetType targetType = (TargetType)0;
+	private const TargetType targetType = TargetType.None;
 
 	private const bool shouldShowInCardLibrary = true;
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new BlockVar(5m, (ValueProp)8)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new BlockVar(5m, ValueProp.Move)];
 
 	public override bool GainsBlock => true;
 
-	protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { (CardTag)2 };
+	protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Defend };
 
 	public Defend()
-		: base(1, (CardType)2, (CardRarity)1, (TargetType)0, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Basic, TargetType.None, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		CreatureCmd.GainBlock(this.Owner.Creature, this.DynamicVars.Block, cardPlay, false);
+		await CreatureCmd.GainBlock(this.Owner.Creature, this.DynamicVars.Block, cardPlay, false);
 	}
 
 	protected override void OnUpgrade()

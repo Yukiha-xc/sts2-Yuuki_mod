@@ -1,6 +1,5 @@
-[gd_scene load_steps=5 format=3 uid="uid://c4dnpxxd6ldei"]
+[gd_scene load_steps=4 format=3 uid="uid://c4dnpxxd6ldei"]
 
-[ext_resource type="Script" path="res://Scripts/YukiVisuals.cs" id="1_visuals"]
 [ext_resource type="Texture2D" path="res://yuuki/images/ui/yuki_standing.png" id="2_hxav6"]
 
 [sub_resource type="Animation" id="Animation_attack"]
@@ -25,7 +24,6 @@ _data = {
 }
 
 [node name="YukiCharacter" type="Node2D"]
-script = ExtResource("1_visuals")
 
 [node name="Visuals" type="Sprite2D" parent="."]
 unique_name_in_owner = true

@@ -39,7 +39,7 @@ public sealed class GiftBoxRelic : CustomRelicModel
             .Where((CardModel c) => glam.CanEnchant(c))
             .ToList();
             
-        CardModel cardModel = (await CardSelectCmd.FromDeckForEnchantment(
+        CardModel? cardModel = (await CardSelectCmd.FromDeckForEnchantment(
             prefs: new CardSelectorPrefs(CardSelectorPrefs.EnchantSelectionPrompt, 1), 
             cards: list.UnstableShuffle(base.Owner.RunState.Rng.Niche).ToList(), 
             enchantment: glam, 
@@ -51,10 +51,11 @@ public sealed class GiftBoxRelic : CustomRelicModel
             CardCmd.Enchant<Glam>(cardModel, 1m);
             cardModel.AddKeyword(MegaCrit.Sts2.Core.Entities.Cards.CardKeyword.Innate);
             
-            NCardEnchantVfx nCardEnchantVfx = NCardEnchantVfx.Create(cardModel);
-            if (nCardEnchantVfx != null)
+            NCardEnchantVfx? nCardEnchantVfx = NCardEnchantVfx.Create(cardModel);
+            Node? previewContainer = NRun.Instance?.GlobalUi.CardPreviewContainer;
+            if (nCardEnchantVfx != null && previewContainer != null)
             {
-                ((Node)(object)NRun.Instance?.GlobalUi.CardPreviewContainer).AddChildSafely((Node?)(object)nCardEnchantVfx);
+                previewContainer.AddChildSafely(nCardEnchantVfx);
             }
         }
     }

@@ -18,14 +18,14 @@ public class DesiringFootsteps : YukiCardModel
 {
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		new BlockVar(10m, (ValueProp)8),
-		new DamageVar(7m, (ValueProp)8)
+		new BlockVar(10m, ValueProp.Move),
+		new DamageVar(7m, ValueProp.Move)
 	});
 
 	public override int CapacityOverload => 1;
 
 	public DesiringFootsteps()
-		: base(1, (CardType)1, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -38,15 +38,20 @@ public class DesiringFootsteps : YukiCardModel
 			{
 				int index = this.Owner.RunState.Rng.Shuffle.NextInt(0, list.Count);
 				Creature val = list[index];
-				await CreatureCmd.Damage(choiceContext, val, this.DynamicVars["Damage"].BaseValue, (ValueProp)8, this.Owner.Creature, (CardModel)this);
+				await CreatureCmd.Damage(choiceContext, val, this.DynamicVars["Damage"].BaseValue, ValueProp.Move, this.Owner.Creature, this, null);
 			}
 		}
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		await CreatureCmd.GainBlock(this.Owner.Creature, this.DynamicVars["Block"].BaseValue, (ValueProp)8, cardPlay, false);
-		await CardPileCmd.Add(this.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), (PileType)3, (CardPilePosition)1, (AbstractModel)null, false);
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
+		await CreatureCmd.GainBlock(this.Owner.Creature, this.DynamicVars["Block"].BaseValue, ValueProp.Move, cardPlay, false);
+		await CardPileCmd.Add(combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(this.Owner), PileType.Discard, CardPilePosition.Bottom, null, false);
 		await Cmd.Wait(0.25f, false);
 	}
 

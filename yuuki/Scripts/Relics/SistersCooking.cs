@@ -19,14 +19,13 @@ public class SistersCooking : CustomRelicModel
 
 	protected override string BigIconPath => "res://yuuki/images/relics/cook.png";
 
-	public override Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+	public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		if (cardPlay.Card.Type == CardType.Power)
+		if (cardPlay.Card.Owner == this.Owner && cardPlay.Card.Type == CardType.Power)
 		{
 			this.Flash();
-			YukiCrystalSystem.AddCrystals();
+			await YukiCrystalSystem.AddCrystals();
 		}
-		return Task.CompletedTask;
 	}
 
 	public SistersCooking()

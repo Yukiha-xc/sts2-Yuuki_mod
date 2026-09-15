@@ -23,12 +23,12 @@ public class Graduation : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new DamageVar(7m, (ValueProp)8),
-		(DynamicVar)new BlockVar(2m, (ValueProp)8)
+		(DynamicVar)new DamageVar(7m, ValueProp.Move),
+		(DynamicVar)new BlockVar(2m, ValueProp.Move)
 	});
 
 	public Graduation()
-		: base(2, (CardType)1, (CardRarity)4, (TargetType)0, shouldShowInCardLibrary: true)
+		: base(2, CardType.Attack, CardRarity.Rare, TargetType.None, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -39,7 +39,7 @@ public class Graduation : YukiCardModel
 		{
 			return;
 		}
-		ICombatState combatState = this.Owner.Creature.CombatState;
+		ICombatState? combatState = this.Owner.Creature.CombatState;
 		if (combatState == null)
 		{
 			return;
@@ -51,12 +51,12 @@ public class Graduation : YukiCardModel
 			{
 				break;
 			}
-			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).TargetingRandomOpponents(combatState)
-				.WithHitFx("vfx/vfx_attack_slash", (string)null, (string)null)
+			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).TargetingRandomOpponents(combatState)
+				.WithHitFx("vfx/vfx_attack_slash", null, null)
 				.Execute(choiceContext);
-			await CreatureCmd.GainBlock(this.Owner.Creature, ((DynamicVar)this.DynamicVars.Block).BaseValue, (ValueProp)8, cardPlay, false);
+			await CreatureCmd.GainBlock(this.Owner.Creature, ((DynamicVar)this.DynamicVars.Block).BaseValue, ValueProp.Move, cardPlay, false);
 		}
-		YukiCrystalSystem.AddCrystals(-crystalCount);
+		await YukiCrystalSystem.AddCrystals(-crystalCount);
 	}
 
 	protected override void OnUpgrade()

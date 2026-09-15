@@ -51,7 +51,7 @@ public sealed class MoonstoneRelic : CustomRelicModel
     {
         UsedThisCombat = false;
         Flash();
-        await PowerCmd.Apply<DexterityPower>(null, base.Owner.Creature, 2m, base.Owner.Creature, null);
+        await PowerCmd.Apply<DexterityPower>(new ThrowingPlayerChoiceContext(), base.Owner.Creature, 2m, base.Owner.Creature, null);
     }
 
     public override bool ShouldDieLate(Creature creature)
@@ -75,7 +75,7 @@ public sealed class MoonstoneRelic : CustomRelicModel
             await CreatureCmd.SetMaxHp(creature, (decimal)creature.MaxHp - loss);
         }
 
-        await PowerCmd.Apply<IntangiblePower>(null, creature, 2m, creature, null);
+        await PowerCmd.Apply<IntangiblePower>(new ThrowingPlayerChoiceContext(), creature, 2m, creature, null);
     }
 }
 

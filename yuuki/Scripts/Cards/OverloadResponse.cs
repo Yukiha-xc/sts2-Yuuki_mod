@@ -14,7 +14,7 @@ public class OverloadResponse : YukiCardModel
 	public override int CapacityOverload => 1;
 
 	public OverloadResponse()
-		: base(3, (CardType)3, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(3, CardType.Power, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

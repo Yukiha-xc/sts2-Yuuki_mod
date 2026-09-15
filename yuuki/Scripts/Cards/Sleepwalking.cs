@@ -18,7 +18,7 @@ public class Sleepwalking : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[3]
 	{
-		(DynamicVar)new BlockVar(7m, (ValueProp)8),
+		(DynamicVar)new BlockVar(7m, ValueProp.Move),
 		new DynamicVar("DexterityLoss", 1m),
 		new DynamicVar("EnergyNextTurn", 2m)
 	});
@@ -26,13 +26,13 @@ public class Sleepwalking : YukiCardModel
 	public override string PortraitPath => "res://yuuki/images/cards/OCHIBA_e03a.png";
 
 	public Sleepwalking()
-		: base(1, (CardType)2, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		await CreatureCmd.GainBlock(this.Owner.Creature, ((DynamicVar)this.DynamicVars.Block).BaseValue, (ValueProp)8, cardPlay, false);
+		await CreatureCmd.GainBlock(this.Owner.Creature, ((DynamicVar)this.DynamicVars.Block).BaseValue, ValueProp.Move, cardPlay, false);
 		await PowerCmd.Apply<DexterityPower>(choiceContext, this.Owner.Creature, -1m, this.Owner.Creature, (CardModel)this, false);
 		await PowerCmd.Apply<EnergyNextTurnPower>(choiceContext, this.Owner.Creature, 2m, this.Owner.Creature, (CardModel)this, false);
 		await Cmd.Wait(0.25f, false);

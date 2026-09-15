@@ -19,16 +19,16 @@ public class LittleStars : YukiCardModel
 
 	public override bool UsesEmpathy => true;
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(4m, (ValueProp)8)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(4m, ValueProp.Move)];
 
 	public LittleStars()
-		: base(1, (CardType)1, (CardRarity)2, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		Creature target = cardPlay.Target;
+		Creature? target = cardPlay.Target;
 		if (target == null)
 		{
 			return;
@@ -36,13 +36,13 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new Dam
 		bool hasEmpathy = target.HasPower<EmpathyPower>();
 		if (target.IsAlive)
 		{
-			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).WithHitCount(2)
+			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).WithHitCount(2)
 				.Targeting(target)
 				.Execute(choiceContext);
 		}
 		if (hasEmpathy && target.IsAlive)
 		{
-			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).WithHitCount(2)
+			await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).WithHitCount(2)
 				.Targeting(target)
 				.Execute(choiceContext);
 			if (target.IsAlive)

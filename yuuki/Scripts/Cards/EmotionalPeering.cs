@@ -16,16 +16,16 @@ public class EmotionalPeering : YukiCardModel
 {
 	public override bool UsesEmpathy => true;
 
-public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)1];
+public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
 	public EmotionalPeering()
-		: base(1, (CardType)2, (CardRarity)2, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		await CardCmd.Discard(choiceContext, await CardSelectCmd.FromHandForDiscard(choiceContext, this.Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, 1), (Func<CardModel, bool>)null, (AbstractModel)this));
+		await CardCmd.Discard(choiceContext, await CardSelectCmd.FromHandForDiscard(choiceContext, this.Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, 1), null, this));
 		if (cardPlay.Target != null)
 		{
 			await PowerCmd.Apply<EmpathyPower>(choiceContext, cardPlay.Target, 1m, this.Owner.Creature, (CardModel)this, false);

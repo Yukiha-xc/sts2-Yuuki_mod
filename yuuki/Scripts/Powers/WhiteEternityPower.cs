@@ -39,8 +39,8 @@ public sealed class WhiteEternityPower : CustomPowerModel
 		{
 			this.Flash();
 			int amount = this.Amount;
-			YukiCrystalSystem.AddCrystals(amount);
-			Player player = this.Owner.Player;
+			await YukiCrystalSystem.AddCrystals(amount);
+			Player? player = this.Owner.Player;
 			if (player != null)
 			{
 				await CardPileCmd.Draw(choiceContext, amount, player);

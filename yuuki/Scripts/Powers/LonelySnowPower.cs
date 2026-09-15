@@ -33,12 +33,12 @@ public class LonelySnowPower : CustomPowerModel
 		YukiCrystalSystem.OnCrystalGained -= HandleCrystalGained;
 	}
 
-	private void HandleCrystalGained(int amount)
+	private async Task HandleCrystalGained(int amount)
 	{
 		if (amount > 0)
 		{
 			this.Flash();
-			TriggerBlock(amount);
+			await TriggerBlock(amount);
 		}
 	}
 

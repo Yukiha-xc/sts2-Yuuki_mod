@@ -31,7 +31,6 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new YukiCrystalVar(
 
 	protected override async Task OnUse(PlayerChoiceContext choiceContext, Creature? target)
 	{
-		YukiCrystalSystem.AddCrystals(this.DynamicVars["YukiCrystal"].IntValue);
-		await Task.CompletedTask;
+		await YukiCrystalSystem.AddCrystals(this.DynamicVars["YukiCrystal"].IntValue);
 	}
 }

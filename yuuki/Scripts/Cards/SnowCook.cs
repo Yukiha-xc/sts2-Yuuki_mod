@@ -19,20 +19,19 @@ public class SnowCook : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[2]
 	{
-		(DynamicVar)new BlockVar(8m, (ValueProp)8),
+		(DynamicVar)new BlockVar(8m, ValueProp.Move),
 		new YukiCrystalVar(1m)
 	});
 
 	public SnowCook()
-		: base(1, (CardType)2, (CardRarity)2, (TargetType)0, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Common, TargetType.None, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
 		await CreatureCmd.GainBlock(this.Owner.Creature, this.DynamicVars.Block, cardPlay, false);
-		YukiCrystalSystem.AddCrystals();
-		await Task.CompletedTask;
+		await YukiCrystalSystem.AddCrystals();
 	}
 
 	protected override void OnUpgrade()

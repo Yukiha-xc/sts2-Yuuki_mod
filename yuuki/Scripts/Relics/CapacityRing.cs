@@ -45,8 +45,8 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new EnergyVar(3)];
 
 	public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
 	{
-		ICombatState combatState = player.Creature.CombatState;
-		if (player == this.Owner && combatState.RoundNumber <= 1)
+		ICombatState? combatState = player.Creature.CombatState;
+		if (player == this.Owner && combatState is not null && combatState.RoundNumber <= 1)
 		{
 			this.Flash();
 			await PlayerCmd.GainEnergy(this.DynamicVars.Energy.BaseValue, this.Owner);

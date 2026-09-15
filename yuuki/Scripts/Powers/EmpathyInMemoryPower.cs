@@ -52,7 +52,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8m, V
 	{
 		if (player == this.Owner.Player)
 		{
-			Creature creature = this.CombatState.Enemies.FirstOrDefault((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
+			Creature? creature = this.CombatState?.Enemies.FirstOrDefault((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>());
 			if (creature != null)
 			{
 				this.Flash();

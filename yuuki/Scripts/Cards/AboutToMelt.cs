@@ -21,7 +21,7 @@ public class AboutToMelt : YukiCardModel
 
 	public override string PortraitPath => "res://yuuki/images/cards/YUKI_e15d.png";
 
-protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(15m, (ValueProp)8)];
+protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new DamageVar(15m, ValueProp.Move)];
 
 	protected override IEnumerable<IHoverTip> ExtraHoverTips
 	{
@@ -36,17 +36,22 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new Dam
 	}
 
 	public AboutToMelt()
-		: base(1, (CardType)1, (CardRarity)3, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(cardPlay.Target)
+		if (cardPlay.Target is not { } target || this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
+		await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(target)
 			.Execute(choiceContext);
 		if (YukiCrystalSystem.CurrentCrystals < 5)
 		{
-			CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(this.CombatState.CreateCard<Burn>(this.Owner), (PileType)1, (Player)null, (CardPilePosition)1), 1.2f, (CardPreviewStyle)1);
+			CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(combatState.CreateCard<Burn>(this.Owner), PileType.Draw, null, CardPilePosition.Bottom), 1.2f, CardPreviewStyle.HorizontalLayout);
 		}
 		await Cmd.Wait(0.25f, false);
 	}

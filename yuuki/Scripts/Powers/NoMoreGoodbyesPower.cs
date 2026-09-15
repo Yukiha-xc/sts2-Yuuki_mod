@@ -27,7 +27,7 @@ public sealed class NoMoreGoodbyesPower : CustomPowerModel
 		if (cardPlay.Card.Owner.Creature == this.Owner && cardPlay.Card.Keywords.Contains(CardKeyword.Exhaust))
 		{
 			this.Flash();
-			Player player = this.Owner.Player;
+			Player? player = this.Owner.Player;
 			if (player != null && player.Creature.CombatState != null)
 			{
 				CardModel card = player.Creature.CombatState.CreateCard(cardPlay.Card.CanonicalInstance, player);

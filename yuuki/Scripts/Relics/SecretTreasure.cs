@@ -26,7 +26,7 @@ public class SecretTreasure : CustomRelicModel
 
 	public override async Task BeforeCombatStart()
 	{
-		ICombatState combatState = this.Owner.Creature.CombatState;
+		ICombatState? combatState = this.Owner.Creature.CombatState;
 		if (combatState == null)
 		{
 			return;
@@ -34,7 +34,7 @@ public class SecretTreasure : CustomRelicModel
 		List<Creature> list = combatState.HittableEnemies.ToList();
 		if (list.Count > 0)
 		{
-			Creature creature = this.Owner.RunState.Rng.CombatTargets.NextItem(list);
+			Creature? creature = this.Owner.RunState.Rng.CombatTargets.NextItem(list);
 			if (creature != null)
 			{
 				this.Flash();

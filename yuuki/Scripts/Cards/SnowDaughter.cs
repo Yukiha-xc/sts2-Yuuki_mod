@@ -16,14 +16,14 @@ public class SnowDaughter : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new PowerVar<SnowDaughterPower>("MagicNumber", 2m)];
 
 	public SnowDaughter()
-		: base(1, (CardType)3, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Power, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
 		await CreatureCmd.TriggerAnim(this.Owner.Creature, "Cast", this.Owner.Character.CastAnimDelay);
-		YukiCrystalSystem.AddCrystals(2);
+		await YukiCrystalSystem.AddCrystals(2);
 		await PowerCmd.Apply<SnowDaughterPower>(choiceContext, this.Owner.Creature, this.DynamicVars["MagicNumber"].BaseValue, this.Owner.Creature, (CardModel)this, false);
 	}
 

@@ -23,13 +23,18 @@ public class PureWhiteBride : YukiCardModel
 	public override IEnumerable<CardKeyword> CanonicalKeywords => this.IsUpgraded ? [CardKeyword.Ethereal, CardKeyword.Innate] : [CardKeyword.Ethereal];
 
 	public PureWhiteBride()
-		: base(0, (CardType)2, (CardRarity)5, (TargetType)3, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Ancient, TargetType.AllEnemies, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		foreach (Creature enemy in this.CombatState.Enemies)
+		if (this.CombatState is not { } combatState || this.Owner.PlayerCombatState is null)
+		{
+			return;
+		}
+
+		foreach (Creature enemy in combatState.Enemies)
 		{
 			if (enemy.IsAlive)
 			{
@@ -46,7 +51,8 @@ public class PureWhiteBride : YukiCardModel
 
 	private IEnumerable<CardModel> GetVoids(Player owner)
 	{
-		return owner.PlayerCombatState.AllCards.Where((CardModel c) => c is MegaCrit.Sts2.Core.Models.Cards.Void && c.Pile != null && (int)c.Pile.Type != 4);
+		return owner.PlayerCombatState?.AllCards.Where((CardModel c) => c is MegaCrit.Sts2.Core.Models.Cards.Void && c.Pile?.Type != PileType.Exhaust)
+			?? Enumerable.Empty<CardModel>();
 	}
 
 	protected override void OnUpgrade()

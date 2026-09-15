@@ -17,26 +17,26 @@ public class YukiCrystalGift : YukiCardModel
 
 	public override string PortraitPath => "res://yuuki/images/cards/ETC_FD_e005a.png";
 
-public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)1];
+public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
 protected override IEnumerable<DynamicVar> CanonicalVars => [(DynamicVar)new YukiCrystalVar(2m)];
 
 	public YukiCrystalGift()
-		: base(0, (CardType)2, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		CardPile drawPile = PileTypeExtensions.GetPile((PileType)1, this.Owner);
+		CardPile drawPile = PileTypeExtensions.GetPile(PileType.Draw, this.Owner);
 		await CardPileCmd.ShuffleIfNecessary(choiceContext, this.Owner);
-		CardModel val = drawPile.Cards.FirstOrDefault();
+		CardModel? val = drawPile.Cards.FirstOrDefault();
 		if (val != null)
 		{
 			await CardCmd.Exhaust(choiceContext, val, false, false);
 		}
 		await PlayerCmd.GainEnergy(1m, this.Owner);
-		YukiCrystalSystem.AddCrystals((int)this.DynamicVars["YukiCrystal"].BaseValue);
+		await YukiCrystalSystem.AddCrystals((int)this.DynamicVars["YukiCrystal"].BaseValue);
 		await Cmd.Wait(0.25f, false);
 	}
 

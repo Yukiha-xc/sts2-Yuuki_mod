@@ -16,7 +16,7 @@ public class PsychicGuardian : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Draw", 1m)];
 
 	public PsychicGuardian()
-		: base(2, (CardType)3, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(2, CardType.Power, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

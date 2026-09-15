@@ -13,29 +13,34 @@ namespace yuuki.Scripts.Cards;
 [Pool(typeof(YukiPool))]
 public class TellAStory : YukiCardModel
 {
-public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)1];
+public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
 	public override string PortraitPath => "res://yuuki/images/cards/Storytelling.png";
 
 	public TellAStory()
-		: base(1, (CardType)2, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		CardModel item = (CardModel)this.CombatState.CreateCard<SpecialMemory>(this.Owner);
-		CardModel item2 = (CardModel)this.CombatState.CreateCard<SpecialStarrySky>(this.Owner);
-		CardModel item3 = (CardModel)this.CombatState.CreateCard<SpecialBlackCat>(this.Owner);
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
+
+		CardModel item = combatState.CreateCard<SpecialMemory>(this.Owner);
+		CardModel item2 = combatState.CreateCard<SpecialStarrySky>(this.Owner);
+		CardModel item3 = combatState.CreateCard<SpecialBlackCat>(this.Owner);
 		List<CardModel> list = new List<CardModel> { item, item2, item3 };
 		if (this.IsUpgraded)
 		{
-			CardCmd.Upgrade((IEnumerable<CardModel>)list, (CardPreviewStyle)1);
+			CardCmd.Upgrade((IEnumerable<CardModel>)list, CardPreviewStyle.HorizontalLayout);
 		}
-		CardModel val = await CardSelectCmd.FromChooseACardScreen(choiceContext, (IReadOnlyList<CardModel>)list, this.Owner, false);
+		CardModel? val = await CardSelectCmd.FromChooseACardScreen(choiceContext, list, this.Owner, false);
 		if (val != null)
 		{
-			await CardPileCmd.AddGeneratedCardToCombat(val, (PileType)2, (Player)null, (CardPilePosition)1);
+			await CardPileCmd.AddGeneratedCardToCombat(val, PileType.Hand, null, CardPilePosition.Bottom);
 		}
 	}
 

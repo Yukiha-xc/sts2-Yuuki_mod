@@ -22,7 +22,7 @@ public class SnowCrystalAttack : YukiCardModel, ITranscendenceCard
 	});
 
 	public SnowCrystalAttack()
-		: base(1, (CardType)1, (CardRarity)1, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -33,14 +33,19 @@ public class SnowCrystalAttack : YukiCardModel, ITranscendenceCard
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		await DamageCmd.Attack(((DynamicVar)(DamageVar)this.DynamicVars["Damage"]).BaseValue).FromCard(this).Targeting(cardPlay.Target)
+		if (cardPlay.Target is not { } target)
+		{
+			return;
+		}
+
+		await DamageCmd.Attack(((DynamicVar)(DamageVar)this.DynamicVars["Damage"]).BaseValue).FromCard(this, cardPlay).Targeting(target)
 			.Execute(choiceContext);
-		await DamageCmd.Attack(((DynamicVar)(DamageVar)this.DynamicVars["Damage"]).BaseValue).FromCard(this).Targeting(cardPlay.Target)
+		await DamageCmd.Attack(((DynamicVar)(DamageVar)this.DynamicVars["Damage"]).BaseValue).FromCard(this, cardPlay).Targeting(target)
 			.Execute(choiceContext);
 		int num = (int)this.DynamicVars["YukiConsume"].BaseValue;
 		if (num > 0)
 		{
-			YukiCrystalSystem.AddCrystals(-num);
+			await YukiCrystalSystem.AddCrystals(-num);
 		}
 	}
 

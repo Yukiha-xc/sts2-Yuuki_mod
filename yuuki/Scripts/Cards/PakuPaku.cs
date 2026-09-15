@@ -26,7 +26,7 @@ public class PakuPaku : YukiCardModel
 	};
 
 	public PakuPaku()
-		: base(0, (CardType)2, (CardRarity)2, (TargetType)0, shouldShowInCardLibrary: true)
+		: base(0, CardType.Skill, CardRarity.Common, TargetType.None, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -35,7 +35,7 @@ public class PakuPaku : YukiCardModel
 		int num = (int)this.DynamicVars["YukiConsume"].BaseValue;
 		if (YukiCrystalSystem.CurrentCrystals >= num)
 		{
-			YukiCrystalSystem.AddCrystals(-num);
+			await YukiCrystalSystem.AddCrystals(-num);
 			await PlayerCmd.GainEnergy(this.DynamicVars["Energy"].BaseValue, this.Owner);
 			await CardPileCmd.Draw(choiceContext, this.DynamicVars["Cards"].BaseValue, this.Owner, false);
 		}

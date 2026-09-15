@@ -39,17 +39,17 @@ public sealed class MagicOfAbilityPower : CustomPowerModel
 
 	public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
 	{
-		if (player == this.Owner.Player && this.CombatState.Enemies.Any((Creature e) => e.IsAlive))
+		if (player == this.Owner.Player && this.CombatState is { } combatState && combatState.Enemies.Any((Creature e) => e.IsAlive))
 		{
 			this.Flash();
 			if (this.Amount > 0)
 			{
-				await CreatureCmd.Damage(choiceContext, this.CombatState.HittableEnemies, this.Amount, ValueProp.Move, this.Owner);
+				await CreatureCmd.Damage(choiceContext, combatState.HittableEnemies, this.Amount, ValueProp.Move, this.Owner);
 			}
-			if (this.CombatState.Enemies.Any((Creature e) => e.IsAlive))
+			if (combatState.Enemies.Any((Creature e) => e.IsAlive))
 			{
 				await PlayerCmd.GainEnergy(1m, player);
-				await CardPileCmd.AddGeneratedCardToCombat(this.CombatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(player), PileType.Discard, null);
+				await CardPileCmd.AddGeneratedCardToCombat(combatState.CreateCard<MegaCrit.Sts2.Core.Models.Cards.Void>(player), PileType.Discard, null);
 				await Cmd.Wait(0.25f);
 			}
 		}

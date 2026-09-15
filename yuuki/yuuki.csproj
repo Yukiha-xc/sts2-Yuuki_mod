@@ -6,10 +6,10 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-    <Sts2Dir Condition="'$(Sts2Dir)' == ''">D:\steam\steamapps\common\Slay the Spire 2</Sts2Dir>
+    <Sts2Dir Condition="'$(Sts2Dir)' == ''">$(MSBuildThisFileDirectory)..\.build\current-game</Sts2Dir>
     <GodotExe Condition="'$(GodotExe)' == ''">E:\文件\杀戮尖塔mod\杀戮尖塔2自制\工具\Godot_v4.5.1-stable_mono_win64\Godot_v4.5.1-stable_mono_win64\Godot_v4.5.1-stable_mono_win64.exe</GodotExe>
-    <Sts2DataDir Condition="'$(Sts2DataDir)' == ''">$(Sts2Dir)\data_sts2_windows_x86_64</Sts2DataDir>
-    <ModOutputDir Condition="'$(ModOutputDir)' == ''">$(Sts2Dir)\mods\$(MSBuildProjectName)</ModOutputDir>
+    <Sts2DataDir Condition="'$(Sts2DataDir)' == ''">D:\steam\steamapps\common\Slay the Spire 2\data_sts2_windows_x86_64</Sts2DataDir>
+    <ModOutputDir Condition="'$(ModOutputDir)' == ''">$(MSBuildThisFileDirectory)..\artifacts\latest\$(MSBuildProjectName)</ModOutputDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,8 +39,8 @@
   <Target Name="ExportPck" DependsOnTargets="Build">
     <Message Text="Copying PCK to Slay the Spire 2 mods folder..." Importance="high" />
     <Exec Command="&quot;$(GodotExe)&quot; --headless --export-pack &quot;Windows Desktop&quot; &quot;$(ModOutputDir)\$(MSBuildProjectName).pck&quot;"
-      EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
-      ContinueOnError="WarnAndContinue" />
+      EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1;Sts2Dir=$(Sts2Dir);Sts2DataDir=$(Sts2DataDir);ModOutputDir=$(ModOutputDir);NUGET_PACKAGES=$(NUGET_PACKAGES)"
+      ContinueOnError="false" />
   </Target>
 </Project>
 

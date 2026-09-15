@@ -27,16 +27,16 @@ public abstract class YukiCardModel : CustomCardModel
 		{
 			if (CapacityOverload > 0)
 			{
-				yield return (IHoverTip)(object)new HoverTip(new LocString("static_hover_tips", "YUUKI_CAPACITY_OVERLOAD.title"), new LocString("static_hover_tips", "YUUKI_CAPACITY_OVERLOAD.description"), (Texture2D)null);
+				yield return new HoverTip(new LocString("static_hover_tips", "YUUKI_CAPACITY_OVERLOAD.title"), new LocString("static_hover_tips", "YUUKI_CAPACITY_OVERLOAD.description"), null);
 				yield return HoverTipFactory.FromCard<MegaCrit.Sts2.Core.Models.Cards.Void>(false);
 			}
 			if (UsesSnowCrystals)
 			{
-				yield return (IHoverTip)(object)new HoverTip(new LocString("static_hover_tips", "YUUKI_SNOW_CRYSTAL.title"), new LocString("static_hover_tips", "YUUKI_SNOW_CRYSTAL.description"), (Texture2D)null);
+				yield return new HoverTip(new LocString("static_hover_tips", "YUUKI_SNOW_CRYSTAL.title"), new LocString("static_hover_tips", "YUUKI_SNOW_CRYSTAL.description"), null);
 			}
 			if (UsesEmpathy)
 			{
-				yield return (IHoverTip)(object)new HoverTip(new LocString("static_hover_tips", "YUUKI_EMPATHY.title"), new LocString("static_hover_tips", "YUUKI_EMPATHY.description"), (Texture2D)null);
+				yield return new HoverTip(new LocString("static_hover_tips", "YUUKI_EMPATHY.title"), new LocString("static_hover_tips", "YUUKI_EMPATHY.description"), null);
 			}
 			if (this.GainsBlock)
 			{

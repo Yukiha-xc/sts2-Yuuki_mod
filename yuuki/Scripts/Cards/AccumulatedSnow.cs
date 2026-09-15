@@ -19,19 +19,19 @@ public class AccumulatedSnow : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[3]
 	{
-		(DynamicVar)new DamageVar(3m, (ValueProp)8),
+		(DynamicVar)new DamageVar(3m, ValueProp.Move),
 		(DynamicVar)new IntVar("ExtraDamage", 8m),
 		new YukiCrystalVar(1m)
 	});
 
 	public AccumulatedSnow()
-		: base(0, (CardType)1, (CardRarity)3, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		Creature target = cardPlay.Target;
+		Creature? target = cardPlay.Target;
 		if (target != null)
 		{
 			bool num = target.HasPower<EmpathyPower>();
@@ -40,11 +40,11 @@ public class AccumulatedSnow : YukiCardModel
 			{
 				await PowerCmd.Remove<EmpathyPower>(target);
 				damageToDeal += this.DynamicVars["ExtraDamage"].BaseValue;
-				YukiCrystalSystem.AddCrystals();
+				await YukiCrystalSystem.AddCrystals();
 			}
 			if (target.IsAlive)
 			{
-				await DamageCmd.Attack(damageToDeal).FromCard(this).Targeting(target)
+				await DamageCmd.Attack(damageToDeal).FromCard(this, cardPlay).Targeting(target)
 					.Execute(choiceContext);
 			}
 			await Cmd.Wait(0.25f, false);

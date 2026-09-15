@@ -22,17 +22,17 @@ public class MagicalGirl : YukiCardModel
 
 	protected override IEnumerable<DynamicVar> CanonicalVars => new _003C_003Ez__ReadOnlyArray<DynamicVar>((DynamicVar[])(object)new DynamicVar[3]
 	{
-		(DynamicVar)new DamageVar(20m, (ValueProp)8),
+		(DynamicVar)new DamageVar(20m, ValueProp.Move),
 		new DynamicVar("Heal", 2m),
 		new DynamicVar("Gold", 15m)
 	});
 
-public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)1];
+public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
 protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.Static((StaticHoverTip)6, Array.Empty<DynamicVar>())];
 
 	public MagicalGirl()
-		: base(2, (CardType)1, (CardRarity)4, (TargetType)2, shouldShowInCardLibrary: true)
+		: base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -40,8 +40,8 @@ protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.Sta
 	{
 		ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
 		bool shouldTriggerFatal = cardPlay.Target.Powers.All((PowerModel p) => p.ShouldOwnerDeathTriggerFatal());
-		AttackCommand val = await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this).Targeting(cardPlay.Target)
-			.WithHitFx("vfx/vfx_attack_blunt", (string)null, "blunt_attack.mp3")
+		AttackCommand val = await DamageCmd.Attack(((DynamicVar)this.DynamicVars.Damage).BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target)
+			.WithHitFx("vfx/vfx_attack_blunt", null, "blunt_attack.mp3")
 			.Execute(choiceContext);
 		if (shouldTriggerFatal && val.Results.SelectMany((List<DamageResult> r) => r).Any((DamageResult r) => r.WasTargetKilled))
 		{

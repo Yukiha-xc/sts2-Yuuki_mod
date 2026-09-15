@@ -46,9 +46,10 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<Buffer
         HoverTipFactory.FromPower<BufferPower>()
     };
 
-    public override async Task BeforeCombatStart()
+    public override Task BeforeCombatStart()
     {
         ActivatedThisCombat = false;
+        return Task.CompletedTask;
     }
 
     public override async Task AfterCardExhausted(PlayerChoiceContext choiceContext, CardModel card, bool causedByEthereal)
@@ -61,7 +62,7 @@ protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<Buffer
             Flash();
             ActivatedThisCombat = true;
             
-            // 閺堚偓婢堆呮晸閸涙枻鎷?2
+            // The first exhausted card each combat grants Buffer and Max HP.
             await PowerCmd.Apply<BufferPower>(choiceContext, base.Owner.Creature, 1m, base.Owner.Creature, card);
             await CreatureCmd.GainMaxHp(base.Owner.Creature, 2m);
         }

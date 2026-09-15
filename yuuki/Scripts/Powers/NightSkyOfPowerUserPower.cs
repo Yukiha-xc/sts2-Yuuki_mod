@@ -1,4 +1,5 @@
-﻿using BaseLib.Abstracts;
+using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
@@ -16,9 +17,8 @@ public sealed class NightSkyOfPowerUserPower : CustomPowerModel
 
 	public override string CustomBigIconPath => "res://yuuki/images/powers/NightSkyOfPowerUserPower.png";
 
-	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+	public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
 	{
-		_ = this.Owner;
 		return 1m;
 	}
 }

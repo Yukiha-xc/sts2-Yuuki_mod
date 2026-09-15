@@ -20,18 +20,18 @@ public class MagicOfAbility : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Damage", 9m)];
 
 	public MagicOfAbility()
-		: base(1, (CardType)3, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Power, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
 	protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
 	{
-		PowerCmd.Apply<MagicOfAbilityPower>(choiceContext, this.Owner.Creature, this.DynamicVars["Damage"].BaseValue, this.Owner.Creature, (CardModel)this, false);
+		await PowerCmd.Apply<MagicOfAbilityPower>(choiceContext, this.Owner.Creature, this.DynamicVars["Damage"].BaseValue, this.Owner.Creature, (CardModel)this, false);
 	}
 
 	protected override void OnUpgrade()
 	{
 		this.DynamicVars["Damage"].UpgradeValueBy(2m);
-		this.AddKeyword((CardKeyword)3);
+		this.AddKeyword(CardKeyword.Innate);
 	}
 }

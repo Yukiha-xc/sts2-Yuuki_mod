@@ -20,7 +20,7 @@ public class LonelySnow : YukiCardModel
 protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("BlockPerCrystal", 2m)];
 
 	public LonelySnow()
-		: base(1, (CardType)3, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

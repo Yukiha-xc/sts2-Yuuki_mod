@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cs3a5onikvhi4"]
 
-[ext_resource type="Texture2D" uid="uid://ddxmxgyyfy8mn" path="res://yuuki/images/ui/snow_crystal.png" id="1_85qf2"]
-[ext_resource type="Texture2D" uid="uid://br43iuvpcnu7d" path="res://yuuki/images/ui/energy_icon_large.png" id="2_85qf2"]
+[ext_resource type="Texture2D" path="res://yuuki/images/ui/snow_crystal.png" id="1_85qf2"]
+[ext_resource type="Texture2D" path="res://yuuki/images/ui/energy_icon_large.png" id="2_85qf2"]
 
 [node name="YukiEnergyCounter" type="Control"]
 layout_mode = 3
@@ -28,7 +28,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Layer1" type="TextureRect" parent="."]
+[node name="Layer1" type="TextureRect" parent="Layers"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -14,10 +14,10 @@ public class MagicOfFamily : YukiCardModel
 {
 protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Heal", 4m)];
 
-public override IEnumerable<CardKeyword> CanonicalKeywords => [(CardKeyword)1];
+public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
 	public MagicOfFamily()
-		: base(1, (CardType)2, (CardRarity)3, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 

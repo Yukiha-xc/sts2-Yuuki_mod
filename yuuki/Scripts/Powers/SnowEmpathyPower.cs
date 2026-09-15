@@ -28,27 +28,39 @@ public sealed class SnowEmpathyPower : CustomPowerModel
 		{
 			return;
 		}
+		if (this.CombatState is not { } combatState)
+		{
+			return;
+		}
 		int triggerCount = this.Amount;
 		for (int i = 0; i < triggerCount; i++)
 		{
-			List<Creature> hasEmpathy = this.CombatState.Enemies.Where((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>()).ToList();
+			List<Creature> hasEmpathy = combatState.Enemies.Where((Creature e) => e.IsAlive && e.HasPower<EmpathyPower>()).ToList();
 			if (hasEmpathy.Count > 0)
 			{
 				this.Flash();
-				Creature target = player.RunState.Rng.CombatTargets.NextItem(hasEmpathy);
+				Creature? target = player.RunState.Rng.CombatTargets.NextItem(hasEmpathy);
+				if (target is null)
+				{
+					continue;
+				}
 				await PowerCmd.Remove<EmpathyPower>(target);
-				YukiCrystalSystem.AddCrystals(2);
+				await YukiCrystalSystem.AddCrystals(2);
 				await Cmd.Wait(0.1f);
 			}
 			else
 			{
-				List<Creature> noEmpathy = this.CombatState.Enemies.Where((Creature e) => e.IsAlive && !e.HasPower<EmpathyPower>()).ToList();
+				List<Creature> noEmpathy = combatState.Enemies.Where((Creature e) => e.IsAlive && !e.HasPower<EmpathyPower>()).ToList();
 				if (noEmpathy.Count > 0 && YukiCrystalSystem.CurrentCrystals >= 2)
 				{
-					YukiCrystalSystem.AddCrystals(-2);
+					await YukiCrystalSystem.AddCrystals(-2);
 					this.Flash();
-					Creature target = player.RunState.Rng.CombatTargets.NextItem(noEmpathy);
-					await PowerCmd.Apply<EmpathyPower>(choiceContext, target, 1m, this.Owner, (CardModel?)null, false);
+					Creature? target = player.RunState.Rng.CombatTargets.NextItem(noEmpathy);
+					if (target is null)
+					{
+						continue;
+					}
+					await PowerCmd.Apply<EmpathyPower>(choiceContext, target, 1m, this.Owner, null, false);
 					await Cmd.Wait(0.1f);
 				}
 			}

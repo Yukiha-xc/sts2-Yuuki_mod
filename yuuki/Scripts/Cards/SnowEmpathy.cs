@@ -32,7 +32,7 @@ public class SnowEmpathy : YukiCardModel
 	}
 
 	public SnowEmpathy()
-		: base(1, (CardType)3, (CardRarity)4, (TargetType)1, shouldShowInCardLibrary: true)
+		: base(1, CardType.Power, CardRarity.Rare, TargetType.Self, shouldShowInCardLibrary: true)
 	{
 	}
 
@@ -44,6 +44,6 @@ public class SnowEmpathy : YukiCardModel
 
 	protected override void OnUpgrade()
 	{
-		this.AddKeyword((CardKeyword)3);
+		this.AddKeyword(CardKeyword.Innate);
 	}
 }

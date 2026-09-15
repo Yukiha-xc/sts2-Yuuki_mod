@@ -25,7 +25,7 @@ public class GatherSnowballPower : CustomPowerModel
 		if (player == this.Owner.Player)
 		{
 			this.Flash();
-			YukiCrystalSystem.AddCrystals();
+			await YukiCrystalSystem.AddCrystals();
 			if (this.Amount > 1)
 			{
 				await PowerCmd.Decrement((PowerModel)(object)this);
