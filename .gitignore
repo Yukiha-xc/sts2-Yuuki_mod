@@ -399,3 +399,18 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Yuuki mod local workspace state
+.build/
+artifacts/
+.git-*-backup-*/
+.git-yuuki/
+
+# Godot/.NET generated state in the migrated project
+yuuki/.godot/
+yuuki/bin/
+yuuki/obj/
+
+# Generated package and historical build log kept outside Git
+yuuki/*.pck
+yuuki/build_log.txt

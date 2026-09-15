@@ -1,0 +1,5 @@
+{
+  "YUUKI-CRYSTALS.title": "雪晶",
+  "YUUKI-CRYSTALS.description": "凝聚着雪之妖精力量的结晶。[img=24x24]res://yuuki/images/ui/snow_crystal.png[/img]上限为 9。雪晶层数大于 2 时，雪雪根据层数获得至多 50% 的伤害加成。若不满足则造成的伤害降低 10%，且回合开始时额外抽一张牌并获得 1 层雪晶。当雪晶层数至少为 8 时，会在回合开始时消耗 1 层。",
+  "YUUKI-CRYSTALS.icon": "res://yuuki/images/ui/snow_crystal.png"
+}
